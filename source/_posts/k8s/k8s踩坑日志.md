@@ -23,3 +23,8 @@ Address: 10.96.0.1
 headless 模式通过CoreDNS 解析到pod上面不走service的负载均衡  
 因为通过coredns ，pod起来后，并不能立即访问到会有延迟  
 clusterIp 模式，访问service 的clusterIp 再通过iptables 转发到pod上面，pod起来后可以直接访问，不会有延迟。  
+
+# minikube 在使用ntf 报错  does not support NFS export 
+挂载 /nfs 报错 does not support NFS export  
+解决: 挂载 /data/nfs
+minikube 在driver 为docker的模式下面 只能挂载到/data目录下面去，其他目录都会报错
