@@ -230,5 +230,9 @@ mv linux-amd64/helm /usr/local/bin/helm
 ```
 
 ## easyconnect 
+Failed to load module "canberra-gtk-module"  
+```
+sudo apt-get install libcanberra-gtk-module
+```
 提示Pango-ERROR **: 10:24:00.000: Harfbuzz version too old (1.3.1)  
 将data/easyconnect/lib.zip 拷贝到 /usr/share/sangfor/EasyConnect 即可  

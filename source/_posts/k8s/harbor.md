@@ -136,18 +136,19 @@ http://repo.goeoeo.com     admin    Harbor12345
 
 防止登录失败，我没开https,修改/etc/docker/daemon.json 
 ```
-sudo echo /etc/docker/daemon.json<<<DATA
+sudo echo /etc/docker/daemon.json<<DATA
 {
   "registry-mirrors": ["https://9lrfffi7.mirror.aliyuncs.com"],
-  "insecure-registries":["repo.goeoeo.com"]
+  "insecure-registries":["repo.goeoeo.com","10.245.20.7:1888"]
 }
-
 DATA
 
 sudo systemctl restart docker.service
 
 # 登录
 docker login -u admin -p Harbor12345 repo.goeoeo.com
+docker login -u admin -p Harbor12345 10.245.20.7:1888
+docker login -u admin -p Harbor12345 dockerhub.qingcloud.com:1880
 
 ```
 ## 在Harbor上创建新项目供上传使用
