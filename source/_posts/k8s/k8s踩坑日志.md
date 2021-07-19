@@ -19,7 +19,20 @@ Address: 10.96.0.1
 * 目前我们只需要安装grafana就可以了
 * Prometheus Operator 通过service monitor 添加监控节点。
 
-# k8s服务中headless 和 Cluster IP 区别
+# k8s服务中headless 和 Cluster IP 区别，使用headless会导致pod访问延迟
 headless 模式通过CoreDNS 解析到pod上面不走service的负载均衡  
 因为通过coredns ，pod起来后，并不能立即访问到会有延迟  
 clusterIp 模式，访问service 的clusterIp 再通过iptables 转发到pod上面，pod起来后可以直接访问，不会有延迟。  
+
+# minikube 在使用ntf 报错  does not support NFS export 
+挂载 /nfs 报错 does not support NFS export  
+解决: 挂载 /data/nfs
+minikube 在driver 为docker的模式下面 只能挂载到/data目录下面去，其他目录都会报错
+
+
+# helm 安装报错
+```
+Error: Kubernetes cluster unreachable: Get "http://localhost:8080/version?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
+```
+报错原因: helm v3版本不再需要Tiller，而是直接访问ApiServer来与k8s交互，通过环境变量KUBECONFIG来读取存有ApiServre的地址与token的配置文件地址，默认地址为~/.kube/config  
+export KUBECONFIG=~/.kube/config  
