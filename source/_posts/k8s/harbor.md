@@ -175,7 +175,19 @@ docker pull repo.goeoeo.com/newbilling/api-gateway:v1
 ## Harbor如何停止与启动
 ```
 cd /home/yu/harbor
-docker-compose down    //停止Harbor
+./install.sh    //停止Harbor
 docker-compose up -d   //启动Harbor
+```
+
+
+## helm 添加harbor仓库。
+arbor安装的时候默认没有helm charts的仓库，启用 harbor 的 chart repository 服务  
+```
+docker-compose stop
+./install.sh  --with-chartmuseum
+```
+helm 添加仓库  
+```
+helm repo add goeoeo --username admin --password=Harbor12345  http://repo.goeoeo.com:8100/chartrepo
 ```
 

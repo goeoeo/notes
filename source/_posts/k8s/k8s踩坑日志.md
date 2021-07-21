@@ -36,3 +36,10 @@ Error: Kubernetes cluster unreachable: Get "http://localhost:8080/version?timeou
 ```
 报错原因: helm v3版本不再需要Tiller，而是直接访问ApiServer来与k8s交互，通过环境变量KUBECONFIG来读取存有ApiServre的地址与token的配置文件地址，默认地址为~/.kube/config  
 export KUBECONFIG=~/.kube/config  
+
+
+# minikube 服务端口映射到主机
+场景: 需要外网访问minikube集群中的服务  
+```
+kubectl port-forward svc/mysql 30001:3306 -n beatflow-data --address 0.0.0.0
+```
