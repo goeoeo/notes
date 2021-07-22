@@ -1,9 +1,12 @@
 ---
 categories:
 - k8s
-  tags:
-- k8s
+tags:
+- minikube
 ---
+
+<!--more-->
+
 
 # minikube 
 minikube 可以搭建一个在单节点运行的k8s集群  
@@ -23,6 +26,9 @@ sudo install minikube-linux-amd64 /usr/local/bin/minikube
 需要使用非root 启动
 ```
 minikube start
+
+# 信任私有仓库 注意如果已经 minikube start 过了，那么需要删除集群重新启动 minikube delete ,这个参数才会生效
+minikube start --insecure-registry=repo.goeoeo.com:8100
 ```
 
 ## 安装kubectl
@@ -60,6 +66,16 @@ kubectl run hello-node --image=hello-node:v1 --port=8080
 ```
 
 这里有个坑 ,我打tag的时候打成的latest，一直报找不到镜像，原因是如果省略imagePullPolicy 镜像tag为 :latest 策略为always ，否则 策略为 IfNotPresent
+
+
+## minikube 端口转发至本地
+这实际上是k8s的功能  
+```
+kubectl port-forward svc/mysql 32316:3306 -n beatflow-data --address 0.0.0.0  
+
+#端口转发要注意，helm install重新安装后，要kill掉当前的端口转发进程，再重新的进行转发一次才能生效，但是helm upgrade是无影响的
+```
+> kubectl proxy 只能转发http请求
 
 
 
