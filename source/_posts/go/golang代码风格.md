@@ -1,7 +1,8 @@
 ---
 categories:
 
-- go tags:
+- go 
+tags:
 - golang项目结构规范
 
 ---
