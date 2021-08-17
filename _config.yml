@@ -105,6 +105,6 @@ search:
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/phpdi/phpdi.github.io.git
+  repo: git@github.com:phpdi/phpdi.github.io.git
   branch: master
 
