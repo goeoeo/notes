@@ -147,7 +147,7 @@ DATA
 sudo systemctl restart docker.service
 
 # 登录
-docker login -u admin -p Harbor12345 repo.goeoeo.com
+docker login -u admin -p Harbor12345 repo.goeoeo.com:8100
 docker login -u admin -p Harbor12345 172.31.164.128
 docker login -u admin -p Harbor12345 10.245.20.7:1888
 docker login -u admin -p Harbor12345 dockerhub.qingcloud.com:1880
