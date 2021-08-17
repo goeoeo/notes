@@ -1,9 +1,9 @@
 ---
 categories:
+- go 
 
-- go tags:
+tags:
 - golang项目结构规范
-
 ---
 
 # Go Code Review Comments 翻译 编写优雅golang代码
