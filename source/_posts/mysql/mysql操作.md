@@ -32,3 +32,9 @@ revoke all privileges on *.* from 'slave'@'%';
 ```
 drop user 'slave'@'slave';
 ```
+
+6. 修改用户密码
+```
+ALTER USER 'replicator'@'%' IDENTIFIED WITH mysql_native_password BY 'p@ss52Dnb';
+```
+'Waiting for master to send event', 'mysql.beatflow-data.svc', 'replicator', '3306', '30', 'mysql-bin.000047', '1832', 'mysql-relay-bin.000002', '1541', 'mysql-bin.000047', 'Yes', 'Yes', '', '', '', '', '', '', '0', '', '0', '1832', '1750', 'None', '', '0', 'No', '', '', '', '', '', '0', 'No', '0', '', '0', '', '', '289', 'ba131dda-ec2a-11eb-9bd9-0242ac110008', 'mysql.slave_master_info', '0', NULL, 'Slave has read all relay log; waiting for more updates', '86400', '', '', '', '', '', '', '', '0', '', '', '', '', '0', ''
