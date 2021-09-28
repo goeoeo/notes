@@ -32,3 +32,13 @@ revoke all privileges on *.* from 'slave'@'%';
 ```
 drop user 'slave'@'slave';
 ```
+
+# mysql导入导出
+
+## 导出
+mysqldump  -uroot -pp@ss52Dnb -h192.168.49.2 -P 32316 subscription bill_0 > ./subscription_bill_0.sql
+
+## 导入
+mysql -uroot -pp@ss52Dnb -h192.168.49.2 -P 32316   
+use subscription;  
+source ./subscription_bill.sql  
