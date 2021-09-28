@@ -236,3 +236,19 @@ sudo apt-get install libcanberra-gtk-module
 ```
 提示Pango-ERROR **: 10:24:00.000: Harfbuzz version too old (1.3.1)  
 将data/easyconnect/lib.zip 拷贝到 /usr/share/sangfor/EasyConnect 即可  
+
+
+## ubuntu 安装markdown编辑器
+地址: https://typora.io/#linux  
+
+```
+# or run:
+# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE
+wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
+# add Typora's repository
+sudo add-apt-repository 'deb https://typora.io/linux ./'
+sudo apt-get update
+# install typora
+sudo apt-get install typora
+
+```
