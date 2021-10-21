@@ -49,4 +49,14 @@ mysqldump  -uroot -pp@ss52Dnb -h192.168.49.2 -P 32316 subscription bill_0 > ./su
 ## 导入
 mysql -uroot -pp@ss52Dnb -h192.168.49.2 -P 32316   
 use subscription;  
-source ./subscription_bill.sql  
+source /home/yu/dumps/pricing20210930064225.sql 
+
+
+
+source /home/yu/dumps/binlog_2021_930_265.sql
+
+
+
+x-special/nautilus-clipboard
+copy
+file:///home/yu/dumps/binlog_2021_930_265.sql
