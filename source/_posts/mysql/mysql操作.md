@@ -38,3 +38,25 @@ drop user 'slave'@'slave';
 ALTER USER 'replicator'@'%' IDENTIFIED WITH mysql_native_password BY 'p@ss52Dnb';
 ```
 'Waiting for master to send event', 'mysql.beatflow-data.svc', 'replicator', '3306', '30', 'mysql-bin.000047', '1832', 'mysql-relay-bin.000002', '1541', 'mysql-bin.000047', 'Yes', 'Yes', '', '', '', '', '', '', '0', '', '0', '1832', '1750', 'None', '', '0', 'No', '', '', '', '', '', '0', 'No', '0', '', '0', '', '', '289', 'ba131dda-ec2a-11eb-9bd9-0242ac110008', 'mysql.slave_master_info', '0', NULL, 'Slave has read all relay log; waiting for more updates', '86400', '', '', '', '', '', '', '', '0', '', '', '', '', '0', ''
+
+
+
+# mysql导入导出
+
+## 导出
+mysqldump  -uroot -pp@ss52Dnb -h192.168.49.2 -P 32316 subscription bill_0 > ./subscription_bill_0.sql
+
+## 导入
+mysql -uroot -pp@ss52Dnb -h192.168.49.2 -P 32316   
+use subscription;  
+source /home/yu/dumps/pricing20210930064225.sql 
+
+
+
+source /home/yu/dumps/binlog_2021_930_265.sql
+
+
+
+x-special/nautilus-clipboard
+copy
+file:///home/yu/dumps/binlog_2021_930_265.sql

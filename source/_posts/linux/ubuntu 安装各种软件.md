@@ -87,9 +87,9 @@ Supervisor是用Python开发的一套通用的进程管理程序，能将一个�
 ```bash
 sudo apt-get install supervisor
 ```
-	
+
 ### java 
-	
+
 ```bash
 java -version 	#输出
 Command 'java' not found, but can be installed with:
