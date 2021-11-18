@@ -191,6 +191,13 @@ wget -q -O - --no-check-certificate https://github.com/nvie/gitflow/raw/develop/
 目前SourceTree支持Mac, Windows, Linux.
 使用 自行探索
 
+## 合并指定提交
+```
+先用git log查看，C2 commit的id，复制下来
+git checkout 到master分支下
+git cherry-pick <C2_id>
+
+```
 
 ## 参考
 * [Git 在团队中的最佳实践--如何正确使用Git Flow](https://www.cnblogs.com/wish123/p/9785101.html)
