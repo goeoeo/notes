@@ -1,3 +1,11 @@
+---
+categories:
+- tidb
+
+
+tags:
+- tidb
+---
 # tidb 数据迁移
 
 k8s上部署 tidb 数据迁移工具dm  

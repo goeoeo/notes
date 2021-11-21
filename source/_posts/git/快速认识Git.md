@@ -1,9 +1,9 @@
 ---
 categories:
+- git 
 
-- git tags:
+tags:
 - git
-
 ---
 
 ## 概述

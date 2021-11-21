@@ -1,3 +1,12 @@
+---
+categories:
+- tidb
+
+
+tags:
+- tidb
+---
+
 # TiDB 安装
 
 [k8s官网安装地址](https://docs.pingcap.com/zh/tidb-in-kubernetes/stable)

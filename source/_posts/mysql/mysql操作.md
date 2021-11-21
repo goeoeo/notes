@@ -1,7 +1,19 @@
+---
+categories:
+- mysql
+
+tags:
+- mysql账号管理
+
+---
+
+
 # 查询所有账号信息
 ```
 SELECT DISTINCT a.`User`,a.`Host`,a.password_expired,a.password_last_changed,a.password_lifetime,a.* FROM mysql.user a;
 ```
+
+
 
 # mysql8 创建帐号
 1. 创建用户  
@@ -10,6 +22,8 @@ create user 'slave'@'%' identified by '密码';
 # 刷新权限
 flush privileges;
 ```
+<!--more-->
+
 2. 授权
 ```
 

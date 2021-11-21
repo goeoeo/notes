@@ -1,9 +1,19 @@
+---
+categories:
+- git
+
+tags:
+- gitlab_runner
+---
+
+
 # Gitlab Runner
 
 ### GitLab-CI
 
 GitLab-CI就是一套配合GitLab使用的持续集成系统（当然，还有其它的持续集成系统，同样可以配合GitLab使用，比如Jenkins）。而且GitLab8.0以后的版本是默认集成了GitLab-CI并且默认启用的。.gitlab-ci.yml的脚本解析就由它来负责。
 
+<!--more-->
 
 
 ### GitLab-Runner

@@ -1,3 +1,12 @@
+---
+categories:
+- tidb
+
+
+tags:
+- tidb
+---
+
 ## 配置文件
 
 ```yaml
