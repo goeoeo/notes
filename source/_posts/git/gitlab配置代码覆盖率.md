@@ -49,7 +49,7 @@ coverage: \d+.\d+% of statements
 ``` 
 2.多包总体测试覆盖率:  
 ```
-total:									(statements)			\d+.\d+%
+\d+.\d+%
 ```
 
 
@@ -81,4 +81,7 @@ go test  -v  -count 1 -cover -coverpkg ./pkg/... ./pkg/...
 ```
 go  test  -count 1  -coverpkg ./pkg/...  ./pkg/...  -coverprofile=coverprofile.cov && go tool cover -func=coverprofile.cov
 ```
+> 提取测试覆盖率 coverage=$(go tool cover -func=cover.out | tail -1  | grep -P '\d+\.\d+(?=\%)' -o)
 
+可以实现一个脚本用来判断测试覆盖率是否小于master ,小于则报错
+参考：https://zhuanlan.zhihu.com/p/143535541
