@@ -114,3 +114,4 @@ gitlab-runner list
 1. 单机测试机器上安装openvpn，参考 [Ubuntu下OpenVPN客户端配置教程](https://cwiki.yunify.com/pages/viewpage.action?pageId=52266586)
 2. Gitlab Runner在执行前，需要从代码仓库中拉取最新的代码，因此需要有权限执行 git fetch/git pull 命令，由于我们的gitlab仓库需要VPN访问，所以在Runner所在的机器需要配置VPN Client，参考命令：openvpn --cd /etc/openvpn/client --config office.ovpn
 3. 由于每次发布构建镜像，都会在本地保存一份，因此Runner所在的机器需要足够的硬盘空间，并且推荐定期清理无用的docker container 和 image
+
