@@ -46,3 +46,29 @@ Test coverage parsing配置为: coverage: \d+.\d+% of statements
 
 Pipeline status 中有显示徽标的代码配置到md文件中即可  
 
+
+## golang 代码覆盖率
+
+### 参数解释
+* -coverkpg参数会自动开启 -cover, 可省略-cover
+* -coverprofile 将结果保存，后面html显示可以用到
+
+
+### 获取单个包pkg的测试覆盖率
+```
+go test  -v  -count 1 -cover -coverpkg ./pkg/... ./pkg
+```
+### 获取单个包pkg的测试覆盖率并输出到网页
+```yaml
+go test  -v  -count 1 -cover -coverpkg ./pkg/... ./pkg  -coverprofile=coverprofile.cov && go tool cover -html=coverprofile.cov
+```
+
+### 获取多个包pkg及其子包的测试覆盖率
+```
+go test  -v  -count 1 -cover -coverpkg ./pkg/... ./pkg/...
+```
+### 获取多个包pkg及其子包的测试覆盖率 并统计总体覆盖率
+对应同时测试多个包的时候，输出的是每个包的测试覆盖率 并没有合并 ，需要借助go tool 工具来获得整个项目的测试覆盖率
+```
+go  test  -count 1  -coverpkg ./pkg/...  ./pkg/...  -coverprofile=coverprofile.cov && go tool cover -func=coverprofile.cov
+```
