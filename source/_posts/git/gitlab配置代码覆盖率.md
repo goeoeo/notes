@@ -42,7 +42,16 @@ unit-test:
 ## gitlab页面配置  
 Project>Settings>CI/CD>General pipelines
 
-Test coverage parsing配置为: coverage: \d+.\d+% of statements  
+### Test coverage parsing: 
+1.单包测试覆盖率统计:  
+```
+coverage: \d+.\d+% of statements  
+``` 
+2.多包总体测试覆盖率:  
+```
+total:									(statements)			\d+.\d+%
+```
+
 
 Pipeline status 中有显示徽标的代码配置到md文件中即可  
 
@@ -72,3 +81,4 @@ go test  -v  -count 1 -cover -coverpkg ./pkg/... ./pkg/...
 ```
 go  test  -count 1  -coverpkg ./pkg/...  ./pkg/...  -coverprofile=coverprofile.cov && go tool cover -func=coverprofile.cov
 ```
+
