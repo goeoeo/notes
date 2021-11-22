@@ -213,6 +213,13 @@ tag 是某个commit id的别名
 
 * git log --graph --pretty=oneline --abbrev-commit #友好的显示日志信息，在linux下可以为这个长命令起一个别名
 
+
+### 保持提交清晰
+* git commit --amend --no-edit # 不产生新的commit记录，以及不更新注释
+* git rebase -i HEAD~n # 合并最后n个提交
+* git rebase master # 使用rebase后master分支历史记录看起来是线性的，相比merge 会少一个commit-id节点
+
+
 ## 问题
 ### error: RPC 失败。HTTP 411 curl 22 The requested URL returned error: 411
 把本地发送的body限制改到500m

@@ -252,3 +252,6 @@ sudo apt-get update
 sudo apt-get install typora
 
 ```
+
+## ubuntu 安装DBEaver
+https://dbeaver.io/download/
