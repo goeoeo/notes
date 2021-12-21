@@ -4,7 +4,7 @@ categories:
 - go 
 
 tags:
-- golang项目结构规范
+- golang规范
 ---
 
 # golang项目结构规范
