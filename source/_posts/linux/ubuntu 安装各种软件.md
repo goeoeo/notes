@@ -255,3 +255,14 @@ sudo apt-get install typora
 
 ## ubuntu 安装DBEaver
 https://dbeaver.io/download/
+
+## 安装企业微信
+### 安装deepin-wine
+https://gitee.com/wszqkzqk/deepin-wine-for-ubuntu
+
+### 安装企业微信
+相关文章:https://segmentfault.com/a/1190000039269586
+
+http://packages.deepin.com/deepin/pool/non-free/d/deepin.com.weixin.work/
+
+sudo apt install ./deepin.com.weixin.work_2.8.10.2010deepin0_i386.deb
