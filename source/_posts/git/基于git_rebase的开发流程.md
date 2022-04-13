@@ -54,3 +54,22 @@ tags:
 13. git push origin --delete hotfix/bugname #删除远程分支
 14. git branch -D hotfix/bugname #删除本地分支
 
+
+## 快速rebase 脚本
+```shell
+#!/bin/sh
+
+base=staging
+
+work=`git symbolic-ref --short -q HEAD`
+
+#checkout base
+git checkout staging
+#pull newest
+git pull
+#checkout work
+git checkout $work
+#rebase
+git rebase $base
+
+```
