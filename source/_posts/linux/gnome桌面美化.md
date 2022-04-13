@@ -7,6 +7,7 @@ tags:
 - gnome
 ---
 
+
 ## 安装以下软件
 ```shell
 sudo apt install gnome-tweak-tool gnome-shell-extensions chrome-gnome-shell
