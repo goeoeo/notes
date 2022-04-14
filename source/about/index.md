@@ -1,8 +1,3 @@
----
-categories: 
-- redis
-tags:
-- redis面试题
----
+# 联系方式
+- Email：goeoeo@qq.com
 
-<!--more-->
