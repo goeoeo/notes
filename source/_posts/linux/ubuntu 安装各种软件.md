@@ -116,17 +116,16 @@ sudo apt install jmeter
 sudo tar -C /usr/local -xzf go1.11.4.linux-amd64.tar.gz
 ```
 3.将go执行命令放到环境变量中
+修改系统环境变量 /etc/environment  
+PATH=$PATH:/usr/local/go/bin:/home/yu/go/bin  
+通过go 命令更改相关设置
 ```bash
-cat >> ~/.profile <<EOF
-export PATH=$PATH:/usr/local/go/bin:/home/yu/go/bin
-export GOROOT=/usr/local/go
-export GO111MODULE=on
-export GOPROXY=https://goproxy.cn
-EOF
-
-
-source ~/.profile
+go env -w GOROOT=/usr/local/go 
+go env -w GO111MODULE=on
+go env -w GOPROXY=https://goproxy.cn
 ```
+
+
 4.go version 测试是否安装成功
 
 ### protoc 安装
@@ -266,3 +265,23 @@ https://gitee.com/wszqkzqk/deepin-wine-for-ubuntu
 http://packages.deepin.com/deepin/pool/non-free/d/deepin.com.weixin.work/
 
 sudo apt install ./deepin.com.weixin.work_2.8.10.2010deepin0_i386.deb
+
+
+## 安装 anbox
+android 模拟器  
+```shell
+sudo apt update
+sudo apt upgrade
+sudo apt install snapd
+sudo snap install --beta --devmode anbox
+
+# reboot
+anbox session-manager
+anbox.appmgr
+```
+### adb 用于安装程序
+```
+sudo apt install android-tools-adb
+```
+### 未开启arm支持导致安装arm.apk 失败
+https://ubunlog.com/en/google-play-store-anbox-arm/

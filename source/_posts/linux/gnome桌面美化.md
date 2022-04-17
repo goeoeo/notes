@@ -24,6 +24,14 @@ https://extensions.gnome.org/extension/19/user-themes/
 https://extensions.gnome.org/extension/307/dash-to-dock/
 
 
-## bing-wallpaper
+### bing-wallpaper
 桌面壁纸切换  
 注意桌面切换在ubuntu20.04 上面需要通过tweak 将工作区关闭调，否则在有两个显示器的情况，壁纸切换会使得主显示器dock出现重影
+
+### TopIcons Plus
+右上角展示微信图标
+https://extensions.gnome.org/extension/1031/topicons/
+
+
+## 企业微信ssdf
+sudo apt-get install libjpeg62:i386
