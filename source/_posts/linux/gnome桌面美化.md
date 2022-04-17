@@ -33,5 +33,10 @@ https://extensions.gnome.org/extension/307/dash-to-dock/
 https://extensions.gnome.org/extension/1031/topicons/
 
 
-## 企业微信ssdf
-sudo apt-get install libjpeg62:i386
+## 锁屏背景
+```shell
+wget github.com/thiggy01/change-gdm-background/raw/master/change-gdm-background
+chmod +x change-gdm-background
+
+sudo ./change-gdm-background /home/yu/图片/BingWallpaper/20220404-Godafoss_ZH-CN9460037606_UHD.jpg
+```
