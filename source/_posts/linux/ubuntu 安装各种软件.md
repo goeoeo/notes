@@ -270,3 +270,9 @@ sudo apt install com.qq.weixin.work.deepin
 # 注释 /opt/apps/com.qq.weixin.deepin/files/run.sh中的第24和26行代码
 ```
 
+#### 企业微信无法显示登录二维码
+```
+# 执行下面命令，重新打开企业微信就有二维码了，实测
+$ sudo apt install libjpeg62:i386 fonts-wqy-zenhei xfonts-wqy
+```
+
