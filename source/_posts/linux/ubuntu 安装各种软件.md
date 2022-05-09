@@ -261,7 +261,12 @@ https://gitee.com/wszqkzqk/deepin-wine-for-ubuntu
 https://github.com/zq1997/deepin-wine
 
 ### 安装企业微信
-deepin.com.weixin.work_2.8.10.2010deepin0_i386.deb
-链接: https://pan.baidu.com/s/1lTGmgswarbGr88RAwBWV7A 提取码: u26w 复制这段内容后打开百度网盘手机App，操作更方便哦
-目前用的这个包 deepine-wine6以下会出现cpu占用高的情况
+https://github.com/zq1997/deepin-wine
+
+
+```shell
+wget -O- https://deepin-wine.i-m.dev/setup.sh | sh
+sudo apt install com.qq.weixin.work.deepin
+# 注释 /opt/apps/com.qq.weixin.deepin/files/run.sh中的第24和26行代码
+```
 
