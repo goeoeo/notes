@@ -3,7 +3,7 @@
 
 
 ## 手动版安装
-### 获取镜像 
+### 获取镜像
 ```
 docker pull docker.elastic.co/elasticsearch/elasticsearch:7.7.0
 ```

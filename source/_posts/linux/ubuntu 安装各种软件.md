@@ -258,30 +258,10 @@ https://dbeaver.io/download/
 ## 安装企业微信
 ### 安装deepin-wine
 https://gitee.com/wszqkzqk/deepin-wine-for-ubuntu
+https://github.com/zq1997/deepin-wine
 
 ### 安装企业微信
-相关文章:https://segmentfault.com/a/1190000039269586
+deepin.com.weixin.work_2.8.10.2010deepin0_i386.deb
+链接: https://pan.baidu.com/s/1lTGmgswarbGr88RAwBWV7A 提取码: u26w 复制这段内容后打开百度网盘手机App，操作更方便哦
+目前用的这个包 deepine-wine6以下会出现cpu占用高的情况
 
-http://packages.deepin.com/deepin/pool/non-free/d/deepin.com.weixin.work/
-
-sudo apt install ./deepin.com.weixin.work_2.8.10.2010deepin0_i386.deb
-
-
-## 安装 anbox
-android 模拟器  
-```shell
-sudo apt update
-sudo apt upgrade
-sudo apt install snapd
-sudo snap install --beta --devmode anbox
-
-# reboot
-anbox session-manager
-anbox.appmgr
-```
-### adb 用于安装程序
-```
-sudo apt install android-tools-adb
-```
-### 未开启arm支持导致安装arm.apk 失败
-https://ubunlog.com/en/google-play-store-anbox-arm/
