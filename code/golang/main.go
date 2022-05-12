@@ -1,23 +1,25 @@
 package main
 
 import (
-	"fmt"
-	"unsafe"
+	"flag"
+	"log"
+	"os"
+	"runtime/pprof"
 )
 
+var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to file")
+
 func main() {
-	s := "eegoo"
-
-	fmt.Printf("%c\n", s[1])
-
-	p := unsafe.Pointer(&s)
-
-	t1 := (*[]byte)(p)
-
-	fmt.Println(string(*t1))
-	t := *t1
-	t[1] = 'c'
-
-	fmt.Println(string(t))
-
+	flag.Parse()
+	// 如果命令行设置了 cpuprofile
+	if *cpuprofile != "" {
+		// 根据命令行指定文件名创建 profile 文件
+		f, err := os.Create(*cpuprofile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		// 开启 CPU profiling
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+	}
 }
