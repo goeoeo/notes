@@ -27,7 +27,7 @@ step1: 预估扩容后的容量
 2. 如果oldLen < 1024 -> newCap=oldCap*2 ,否则 newCap=oldCap*1.25
 
 > golang1.16.5 后 是oldCap < 1024 -> newCap=oldCap*2 ,否则 newCap=oldCap*1.25 step2: newCap个元素需要多大的内存   
-内存= 预估容量* 元素类型大小
+> 内存= 预估容量* 元素类型大小
 
 step3: 匹配到合适的内存规格
 
@@ -417,16 +417,88 @@ GOMAXPROCS 设置P的数量，最多有GOMAXPROCS个线程分布在多个CPU上�
 当M执行work stealing从其它P偷不到G时，它可以从全局队列获取G
 
 ### go fun() 经历了什么过程
+我们通过go func 来创建一个goroutine;  
+
+有多个存储G的队列，一个是局部调度器P的本地队列，一个是全局G队列。新创建的G会先保存在P的本地队列中，如果P的本地队列已经满了
+就会保存在全局的队列中  
+
+G只能运行在M中，一个M必须持有一个P,M与P是1:1的关系，M会从P的本地队列弹出一个可执行状态的G来执行，如果P的本地队列为空，就会
+想其它的MP组合偷取一个可执行的G来执行  
+
+一个M调度G执行的过程是一个循环机制
+
+当M执行某一个G时候如果发生了syscall或则其余的阻塞操作，M会阻塞，如果当前有一些G在执行，runtime会把这个线程M从P中摘除（detach），
+然后再创建一个新的操作系统的线程（如果有空闲的线程可用就复用空闲线程）来服务于这个P
+
+![img.png](go硬核干货/img_10.png)
+
 ### 调度器的生命周期
+#### M0
+M0 是启动程序后的编号为0的主线程，这个M对应的实例会在全局变量runtime.m0中，不需要在heap上分配，M0负责执行初始化操作和启动
+第一个G，在之后M0就和其他的M一样了。  
+
+#### G0
+G0是每次启动一个M都会第一个创建的goroutine,GO仅用于负责调度G,G0不指向任何可执行的函数，每个M都会有一个自己的G0。在调度或者系统
+调用时会使用G0的栈空间，全局变量的G0是M0的G0
+
+
+
 ### 可视化的GMP编程
+#### trance编程  
+```go
+package main
+
+import (
+   "fmt"
+   "os"
+   "runtime/trace"
+)
+
+func main() {
+   f, err := os.Create("trace.out")
+   if err != nil {
+      panic(err)
+   }
+   defer f.Close()
+   trace.Start(f)
+
+   fmt.Println("hello world")
+   
+   trace.Stop()
+
+}
+```
+
+> go tool trace trace.out  浏览器访问
 
 
 
 
+#### 通过Debug trance查看GMP信息 
+```shell
+GODEBUG=schedtrace=1000 程序
+> 1000指的是1000ms时间间隔
 
+SCHED 3014ms: gomaxprocs=8 idleprocs=8 threads=19 spinningthreads=0 idlethreads=14 runqueue=0 [0 0 0 0 0 0 0 0]
+```
 
+* SCHED 调试信息
+* 3014ms 从程序启动到输出经历的时间
+* gomaxprocs P的数量 默认是和CPU核心数是一致的
+* idleprocs 处理idel状态的p的数量，gomaxprocs-idleprocs=目前正在执行的P的数量
+* threads 线程数量(包括M0,包括GODEBUG调试的信息)
+* spinningthreads 处于自旋状态的线程数量
+* idlethreads idle状态的tread
+* runqueue 全局队列中G的数量
+* [0 0 0 0 0 0 0 0] 每个P的local queue本地队列中，目前存在G的数量
 
+## GO调度器GMP场景过程全分析
 
+### G1创建G3局
+局部性: G3优先加入G1所在的本地队列  
 
+P拥有G1,M1获取P后开始运行G1,G1使用go func() 创建G2,为了局部性G2优先加入到P1的本地队列
+
+### 
 
 

@@ -267,7 +267,7 @@ https://github.com/zq1997/deepin-wine
 ```shell
 wget -O- https://deepin-wine.i-m.dev/setup.sh | sh
 sudo apt install com.qq.weixin.work.deepin
-# 注释 /opt/apps/com.qq.weixin.deepin/files/run.sh中的第24和26行代码
+# 注释 /opt/apps/com.qq.weixin.work.deepin/files/run.sh中的第24和26行代码
 ```
 
 #### 企业微信无法显示登录二维码
