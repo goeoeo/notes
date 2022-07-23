@@ -20,8 +20,8 @@ sudo apt install gnome-tweak-tool gnome-shell-extensions chrome-gnome-shell
 ### User Themes ：改变Gnome主题必要插件！
 https://extensions.gnome.org/extension/19/user-themes/
 
-### Dash to Dock ：类似与mac底部dash的插件
-https://extensions.gnome.org/extension/307/dash-to-dock/
+### Dock from Dash ：类似与mac底部dash的插件
+https://extensions.gnome.org/extension/4703/dock-from-dash/
 
 
 ### bing-wallpaper

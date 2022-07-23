@@ -109,7 +109,7 @@ sudo apt install jmeter
 
 ### golang 环境安装
 1.到[https://golang.org/dl/](https://golang.org/dl/)下载最新的golang包，需要翻墙
-2. 国内下载地址[https://studygolang.com/dl](https://studygolang.com/dlhttps://studygolang.com/dl)
+2. 国内下载地址[https://studygolang.com/dl](https://studygolang.com/dl)
 
 2.将包解压到/usr/local下
 ```bash
