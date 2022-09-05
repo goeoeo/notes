@@ -276,3 +276,12 @@ sudo apt install com.qq.weixin.work.deepin
 $ sudo apt install libjpeg62:i386 fonts-wqy-zenhei xfonts-wqy
 ```
 
+## ubuntu22.04 安装sogou
+https://blog.csdn.net/weixin_64684404/article/details/125461860
+
+安装依赖
+```
+sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2
+
+sudo apt install libgsettings-qt1
+```
