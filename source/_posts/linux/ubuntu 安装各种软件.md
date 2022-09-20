@@ -109,7 +109,7 @@ sudo apt install jmeter
 
 ### golang 环境安装
 1.到[https://golang.org/dl/](https://golang.org/dl/)下载最新的golang包，需要翻墙
-2. 国内下载地址[https://studygolang.com/dl](https://studygolang.com/dlhttps://studygolang.com/dl)
+2. 国内下载地址[https://studygolang.com/dl](https://studygolang.com/dl)
 
 2.将包解压到/usr/local下
 ```bash
@@ -276,3 +276,12 @@ sudo apt install com.qq.weixin.work.deepin
 $ sudo apt install libjpeg62:i386 fonts-wqy-zenhei xfonts-wqy
 ```
 
+## ubuntu22.04 安装sogou
+https://blog.csdn.net/weixin_64684404/article/details/125461860
+
+安装依赖
+```
+sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2
+
+sudo apt install libgsettings-qt1
+```
