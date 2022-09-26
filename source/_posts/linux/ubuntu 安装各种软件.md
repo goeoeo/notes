@@ -285,3 +285,10 @@ sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2
 
 sudo apt install libgsettings-qt1
 ```
+
+## 终端管理工具electerm
+https://github.com/electerm/electerm
+
+```shell
+sudo snap install electerm --classic
+```
