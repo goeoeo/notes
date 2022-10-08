@@ -292,3 +292,6 @@ https://github.com/electerm/electerm
 ```shell
 sudo snap install electerm --classic
 ```
+
+## ipfs
+https://github.com/ipfs/ipfs-desktop/releases/download/v0.23.0/ipfs-desktop-0.23.0-linux-amd64.deb
