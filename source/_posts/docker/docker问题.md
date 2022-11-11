@@ -22,7 +22,7 @@ sudo systemctl daemon-reload &&  sudo systemctl restart docker
 
 # docker 清理磁盘
 ```shell
-docker system df # -v 可以显示详细信息
+docker system df -v # -v 可以显示详细信息
 ```
 该命令列出了 docker 使用磁盘的 4 种类型：  
 * Images: 所有镜像占用的空间，包括拉取的镜像、本地构建的镜像
