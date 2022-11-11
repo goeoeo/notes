@@ -1,7 +1,8 @@
 ---
 categories:
 - k8s
-  tags:
+
+tags:
 - harbor
 ---
 
