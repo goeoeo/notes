@@ -128,6 +128,13 @@ go env -w GOPROXY=https://goproxy.cn
 
 4.go version 测试是否安装成功
 
+### 安装多版本go 
+```shell
+go install golang.org/dl/go1.19.3@latest
+go1.19.3 download
+go1.19.3 version
+```
+
 ### protoc 安装
 1. 下载protoc包
 ```
