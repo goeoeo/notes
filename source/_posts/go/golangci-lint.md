@@ -121,6 +121,12 @@ run:
   issues-exit-code: 1
 ```
 
+## goland中配置golangci-lint
+1. go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest  （本地已下载则跳过）
+1. Plugins 中安装 Go Linter
+2. Tools 中点击Go Linter 设置执行路径
+
+
 # 使用 pre-commit hook
 在项目开发中，我们都会使用到 git，因此我们可以将代码静态检查放在一个 git 触发点上，而不用每次写完代码手动去执行 golangci-lint run 命令。
 这里，我们就需要用到 git hooks。
