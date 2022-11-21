@@ -1,0 +1,119 @@
+version: '3'
+services:
+  # MongoDB: https://hub.docker.com/_/mongo/
+  mongo:
+    image: mongo:3
+    restart: on-failure
+    volumes:
+      - mongo_data:/data/db
+  # Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/6.x/docker.html
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.10
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+    ports:
+      # Graylog web interface and REST API
+      - 19300:9300
+      # Syslog TCP
+      - 19200:9200
+    restart: on-failure
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+  # Graylog: https://hub.docker.com/r/graylog/graylog/
+  graylog:
+    image: graylog/graylog:3.3
+    environment:
+      - GRAYLOG_MESSAGE_JOURNAL_MAX_SIZE=5gb
+      - GRATLOG_MESSAGE_JOURNAL_MAX_AGE=2h
+      # CHANGE ME (must be at least 16 characters)!
+      - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
+      # Password: admin
+      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+      - GRAYLOG_HTTP_EXTERNAL_URI=${GRAYLOG_HTTP_EXTERNAL_URI}
+      - GRAYLOG_ROOT_TIMEZONE=${GRAYLOG_ROOT_TIMEZONE}
+    depends_on:
+      - mongo
+      - elasticsearch
+    ports:
+      # Graylog web interface and REST API
+      - 9000:9000
+      # Syslog TCP
+      - 1514:1514
+      # Syslog UDP
+      - 1514:1514/udp
+      # GELF TCP
+      - 12201:12201
+      # GELF UDP
+      - 12201:12201/udp
+    volumes:
+      - graylog_data:/usr/share/graylog/data
+  # Jaeger Collector
+  jaeger-collector:
+    image: jaegertracing/jaeger-collector
+    ports:
+      - "14269:14269"
+      - "14268:14268"
+      - "14250:14250"
+      - "9411:9411"
+    restart: on-failure
+    environment:
+      - SPAN_STORAGE_TYPE=elasticsearch
+    command: [
+      "--es.server-urls=http://elasticsearch:9200",
+      "--es.num-shards=1",
+      "--es.num-replicas=0",
+      "--log-level=error"
+    ]
+    depends_on:
+      - elasticsearch
+  # Jaeger Agent
+  jaeger-agent:
+    image: jaegertracing/jaeger-agent
+    hostname: jaeger-agent
+    command: ["--reporter.grpc.host-port=jaeger-collector:14250"]
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+    restart: on-failure
+    environment:
+      - SPAN_STORAGE_TYPE=elasticsearch
+    depends_on:
+      - jaeger-collector
+  # Jaeger Query
+  jaeger-query:
+    image: jaegertracing/jaeger-query
+    environment:
+      - SPAN_STORAGE_TYPE=elasticsearch
+      - no_proxy=localhost
+    ports:
+      - "16686:16686"
+      - "16687:16687"
+    restart: on-failure
+    command: [
+      "--es.server-urls=http://elasticsearch:9200",
+      "--span-storage.type=elasticsearch",
+      "--log-level=debug"
+    ]
+    depends_on:
+      - jaeger-agent
+
+volumes:
+  mongo_data:
+    driver: local
+  es_data:
+    driver: local
+  graylog_data:
+    driver: local

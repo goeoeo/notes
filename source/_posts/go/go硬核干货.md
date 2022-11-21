@@ -494,11 +494,12 @@ SCHED 3014ms: gomaxprocs=8 idleprocs=8 threads=19 spinningthreads=0 idlethreads=
 
 ## GO调度器GMP场景过程全分析
 
-### G1创建G3局
+### G1创建G3
 局部性: G3优先加入G1所在的本地队列  
 
 P拥有G1,M1获取P后开始运行G1,G1使用go func() 创建G2,为了局部性G2优先加入到P1的本地队列
+### G1执行完毕
+G1运行完成后（函数：goexit）,M上运行的goroutine切换为G0,G0负责调度时协程的切换（函数:schedule）。  
+从P的本地队列获取G2,从G0切换到G2,并开始执行G2(函数:execute)。实现了线程M1的复用
 
-### 
-
-
+### G2开辟过多的G
