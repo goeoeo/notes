@@ -178,7 +178,7 @@ docker info
 sudo curl -L --fail https://github.com/docker/compose/releases/download/1.29.2/run.sh -o /usr/local/bin/docker-compose
 
 # 方式1不好使，直接去https://github.com/docker/compose/releases/上下载 
-mv docker-compose-Linux-x86_64   /usr/local/bin/docker-compose
+sudo mv docker-compose-Linux-x86_64   /usr/local/bin/docker-compose
 
 sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
@@ -285,3 +285,13 @@ sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2
 
 sudo apt install libgsettings-qt1
 ```
+
+## 安装截图工具 flameshot
+```shell
+sudo apt-get install flameshot
+
+```
+自定义快捷键   
+name flameshot
+cmd /usr/bin/flameshot gui
+快捷键 Ctrl+q
