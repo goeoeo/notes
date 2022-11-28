@@ -77,7 +77,108 @@ if err := agent.Listen(agent.Options{Addr: "0.0.0.0:6060"}); err != nil {
 
 ### 采集cpu
 * 程序在本地: gops pprof-cpu 54143
-* 远程采集: gops pprof-cpu 172.31.60.114:9300
+* 远程采集: gops pprof-cpu 127.0.0.1:6060
+
+### 查看内存情况  gops memstats
+gops memstats 127.0.0.1:6060
+```
+//已分配的对象的字节数 和HeapAlloc相同
+alloc: 337.66MB (354064872 bytes)  
+
+//分配的字节数累积之和,所以对象释放的时候这个值不会减少
+total-alloc: 2.70TB (2970376940944 bytes) 
+
+//从操作系统获得的内存总数  Sys是下面的XXXSys字段的数值的和, 是为堆、栈、其它内部数据保留的虚拟内存空间 注意虚拟内存空间和物理内存的区别
+//sys 不是实际占用的物理内存大小， 是向操作系统申请的所有虚拟内存空间大小之和，等同于 XXX_sys + XXX_sys。 虚拟内存只保留了和物理内存的页表映射，不代表实际内存，go 也不会去做这个映射的解除，所以这个值不会掉。
+sys: 1.85GB (1983248840 bytes) 
+
+//运行时地址查找的次数，主要用在运行时内部调试上.
+lookups: 0 
+
+//堆对象分配的次数累积和 活动对象的数量等于Mallocs - Frees
+mallocs: 72348366613 
+
+//释放的对象数.
+frees: 72345733547 
+
+//分配的堆对象的字节数 包括所有可访问的对象以及还未被垃圾回收的不可访问的对象. 所以这个值是变化的，分配对象时会增加，垃圾回收对象时会减少.
+heap-alloc: 337.66MB (354064872 bytes) 
+
+//从操作系统获得的堆内存大小. 虚拟内存空间为堆保留的大小，包括还没有被使用的. HeapSys 可被估算为堆已有的最大尺寸.
+heap-sys: 1.76GB (1885208576 bytes) 
+
+//HeapIdle是idle(未被使用的) span中的字节数. Idle span是指没有任何对象的span,这些span **可以**返还给操作系统，或者它们可以被重用 或者它们可以用做栈内存.
+//HeapIdle 减去 HeapReleased 的值可以当作"可以返回到操作系统但由运行时保留的内存量". 以便在不向操作系统请求更多内存的情况下增加堆，也就是运行时的"小金库".
+//如果这个差值明显比堆的大小大很多，说明最近在活动堆的上有一次尖峰.
+heap-idle: 1.34GB (1438941184 bytes) 
+
+//正在使用的span的字节大小.
+//正在使用的span是值它至少包含一个对象在其中.
+//HeapInuse 减去 HeapAlloc的值是为特殊大小保留的内存，但是当前还没有被使用
+heap-in-use: 425.59MB (446267392 bytes)
+
+//HeapReleased 是返还给操作系统的物理内存的字节数.
+//它统计了从idle span中返还给操作系统，没有被重新获取的内存大小.
+heap-released: 1.21GB (1297219584 bytes)
+
+//HeapObjects 实时统计的分配的堆对象的数量,类似HeapAlloc.
+heap-objects: 2633066
+
+//栈span使用的字节数。
+//正在使用的栈span是指至少有一个栈在其中.
+//注意并没有idle的栈span,因为未使用的栈span会被返还给堆(HeapIdle).
+stack-in-use: 2.12MB (2228224 bytes)
+
+//从操作系统取得的栈内存大小.
+//等于StackInuse 再加上为操作系统线程栈获得的内存.
+stack-sys: 2.12MB (2228224 bytes)
+
+//分配的mspan数据结构的字节数.
+stack-mspan-inuse: 3.47MB (3637184 bytes)
+
+//从操作系统为mspan获取的内存字节数
+stack-mspan-sys: 10.54MB (11048640 bytes)
+
+//分配的mcache数据结构的字节数.
+stack-mcache-inuse: 4.69KB (4800 bytes)
+
+//从操作系统为mcache获取的内存字节数.
+stack-mcache-sys: 15.23KB (15600 bytes)
+
+//off-heap的杂项内存字节数.
+other-sys: 2.11MB (2215889 bytes)
+
+//垃圾回收元数据使用的内存字节数.
+gc-sys: 74.55MB (78175424 bytes)
+
+//下一次垃圾回收的目标大小，保证 HeapAlloc ≤ NextGC.
+//基于当前可访问的数据和GOGC的值计算而得.
+next-gc: when heap-alloc >= 528.37MB (554037040 bytes)
+
+//上一次垃圾回收的时间.
+last-gc: 2022-11-28 10:56:14.274883811 +0800 CST
+
+//自程序开始 STW 暂停的累积纳秒数.
+//STW的时候除了垃圾回收器之外所有的goroutine都会暂停.
+gc-pause-total: 9.017849591s
+
+//一个循环buffer，用来记录最近的256个GC STW的暂停时间.
+gc-pause: 467466
+
+//最近256个GC暂停截止的时间.
+gc-pause-end: 1669604174274883811
+
+//GC的总次数.
+num-gc: 12970
+// 强制GC的次数
+num-forced-gc: 0
+//自程序启动后由GC占用的CPU可用时间，数值在 0 到 1 之间.
+//0代表GC没有消耗程序的CPU. GOMAXPROCS * 程序运行时间等于程序的CPU可用时间.
+gc-cpu-fraction: 0.0011345879785226885
+//是否允许GC.
+enable-gc: true
+debug-gc: false
+```
 
 ### gops 功能
 * gops 查看当前的运行的go程序，含有星号即可使用下面的命令
