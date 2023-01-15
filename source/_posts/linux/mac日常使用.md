@@ -87,3 +87,28 @@ source ~/.bash_profile
 cd "$(brew --repo)/Library/Taps/homebrew/homebrew-core"
 git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git
 ```
+
+
+# 命令自动补全 
+```shell
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+```
+vim .zshrc 写入
+```
+plugins=(git zsh-autosuggestions)
+```
+
+## git命令 自动补全
+```shell
+brew install bash-completion
+mkdir .zsh_fpath
+curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh \
+-o ~/.zsh_fpath/.git-completion.zsh
+```
+vim .zshrc 内容如下  
+```
+zstyle ':completion:*:*:git:*' script ~/.zsh_fpath/.git-completion.zsh
+fpath=(~/.zsh_fpath $fpath)
+autoload -Uz compinit && compinit
+```
+
