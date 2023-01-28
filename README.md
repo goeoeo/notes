@@ -4,17 +4,28 @@
 sudo apt install npm
 ```
 
-2. 通过n模块安装指定的nodejs
+
+## 安装指定版本node
+
+### linux
+1. 通过n模块安装指定的nodejs
 ```shell
 sudo npm install -g n
 ```
 
-3. node 和 hexo 存在版本适配问题
+2. node 和 hexo 存在版本适配问题
 ```shell
 # 安装官方12.17 不翻墙会很慢
 sudo n 12.17
 ```
 
+### mac
+1. 通过nvm安装指定版本nodejs
+```shell
+brew install nvm 
+nvm install v12.17
+nvm use v12.17
+```
 
 # hexo 安装
 ```shell

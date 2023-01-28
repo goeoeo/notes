@@ -183,7 +183,8 @@ docker info
 #### docker-compose
 ```
 # 方式1
-sudo curl -L --fail https://github.com/docker/compose/releases/download/1.29.2/run.sh -o /usr/local/bin/docker-compose
+curl -L https://get.daocloud.io/docker/compose/releases/download/v2.15.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+
 
 # 方式1不好使，直接去https://github.com/docker/compose/releases/上下载 
 sudo mv docker-compose-Linux-x86_64   /usr/local/bin/docker-compose
