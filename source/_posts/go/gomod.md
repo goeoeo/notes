@@ -61,3 +61,16 @@ go build  -a -v -o app main.go
 export GO111MODULE=on
 go build -mod=vendor -a -v -o app main.go
 ```
+
+
+
+## go1.18 go workspaces
+go work init  
+会生成  go.work 文件    
+```
+go 1.18
+
+use (
+	../benchmark
+)
+```
