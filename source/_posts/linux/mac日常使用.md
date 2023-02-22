@@ -112,3 +112,25 @@ fpath=(~/.zsh_fpath $fpath)
 autoload -Uz compinit && compinit
 ```
 
+
+# 安装ab压测工具
+## 先安装三个工具 
+```shell
+brew install apr
+brew install apr-util
+brew install prce
+```
+
+> 注意根据输出更新 ~/.zshrc 以及对应环境变量
+
+## 下载httpd
+https://httpd.apache.org/download.cgi#apache24  
+解压进行 httpd目录   
+```
+./configure
+make  
+sudo make install 
+
+# 测试
+ab -v
+```
