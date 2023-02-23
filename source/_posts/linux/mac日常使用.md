@@ -134,3 +134,12 @@ sudo make install
 # 测试
 ab -v
 ```
+
+# mac 添加 ssh-agent
+现象：当我用golang代码通过sshtunnel 通过跳板机连接数据库的时候，报错 认证失败  
+原因：我本地mac 机器没有添加ssh client    
+解决： 
+```
+eval 'ssh-agent'
+ssh-add ~/.ssh/id_rsa
+```
