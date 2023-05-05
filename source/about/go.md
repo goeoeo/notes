@@ -10,15 +10,67 @@
 
 - 陈誉/男/1994 
 - 本科/西华大学建筑系 
-- 工作年限：5年  
+- 工作年限：7年  
 - 技术博客：https://phpdi.github.io
 - 期望职位：Go中级程序员
-- 期望薪资：20k~25K
+- 期望薪资：26k~30K
 - 期望城市：成都
 
 
 ## 工作经历
-### 成都领沃网络技术有限公司 （ 2018年12月 ~ 至今 ）
+### 北京青云科技股份有限公司 （ 2021年5月 ~ 至今 ）
+在公司获得2022年年度优秀员工的称号
+
+### 计量计费平台
+计量计费系统是服务于IT行业的计量、计费系统。帮助合作伙伴解决定价、计量、计费、扣费、订单展示、账单展示等问题。
+
+独立的计量计费服务，与具体的第三方业务系统解耦。  
+平台级服务，可支持多接入系统的对接。  
+系统内部各模块基于微服务设计架构，可独立支持计量和计费服务。  
+系统内部各模块可支持水平扩展。  
+独立的通用分布式任务系统可以作为基础的公共组件。
+
+整个项目被划分为charging、collect、customer、customer_info、discount、iam、notifier、payment、pricing、config、subscription、worker  
+11个微服务，我负责其中:
+* 定价服务 pricing，利用公式定价的方式实现各种不同的定价需求
+* 计量服务 collect，与第三方进行交互收集计量信息，进行扣费
+* 支付服务 payment，支付服务抽象，内部接入青云支付/支付宝/微信/Stripe，
+* 通知服务 notifier，利用rabbitmq中间件，实现对第三方接入系统的通知，保证消息必达
+* 配置服务 config，用于存储各个接入系统的各项配置，例如 通知接口配置，支付信息配置等
+
+技术亮点:
+* 利用k8s进行项目部署，其中包括docker打包，远程仓库，helm 等技术的使用
+* 以grpc 为基础，整合grpc-gateway，swagger，etcd，gin，gorm等技术组件搭建微服框架
+* 利用docker 制作基础镜像，解决个环境统一编译go程序，以及proto编译
+* 编写分布式调度框架qingjob，用以支撑计量计费服务
+* 利用gitlab ci/cd 功能实现代码静态检查，自动化测试，编译，部署
+* 利用rabbitmq，实现异步通信以及微服务间的业务解耦
+* 使用 prometheus+grafana 作为系统监控，监控api响应速度，以及sql执行时间以达到优化程序的效果
+
+
+
+### 产品中心
+青云产品中心指责包括，产品目录维护，产品上下管理，产品定价，成本管理，以及各产品在私有云中的安装  
+项目的难点在于，这个项目并不是一开始就存在的，所以设计的时候，需要考虑各个产品的规格和定价系统的兼容性   
+
+项目采用微服务方式开发，目前包含4个服务，cooperate，product，catalog,cost。整个产品中心90%的代码均由我实现  
+* cooperate 负责操作日志记录，版本信息记录
+* product 负责产品上下架，产品规格上下架，产品定价管理。
+* catalog 负责产品目录树管理
+* cost 负责成本管理
+
+技术亮点：
+* 将以前实现的 api格式验证器 整合进proto的编译当中，结合grpc拦截器，使得格式验证，只需在proto文件中定义即可，减少代码量，提供了程序编写效率与可维护性  
+* 整合overseer 包进基础框架，实现服务平滑更新
+* 优化定价服务，在数据量较大的情况下，获取价格相应速度相比于原计费系统 提高了100倍，5ms一下
+* 利用gops 分析程序性能瓶颈 优化程序性能
+* 编写unit-test小框架，实现对单个服务的业务测试，减少业务测试的代码量，提高程序质量
+* 使用zookeeper组件实现服务发现
+* 尝试采用DDD方式组织代码，提高代码的可维护度
+
+
+
+### 成都领沃网络技术有限公司 （ 2018年12月 ~ 2021年5月 ）
 
 #### 领沃云控制台项目 
 整个项目采用docker容器管理方式，采用微服务方式进行项目开发   
@@ -97,16 +149,16 @@
 
 - 开发环境：Linux
 - 语言：Go/PHP
-- 框架：Gin/Beego/Laravel/ThinkPHP
-- 数据库相关：MySQL/SQLite/Redis/Memcache/Elasticsearch
-- 消息队列：Kafka/Rabbitmq
-- 工具：Git/Svn/Swagger
-- 容器相关：Docker/docker-compose/docker-swarm
-- 微服务相关: Etcd/Grpc/Go-micro
+- 框架：Benchmark(自研微服务框架)/Gin/Beego/Laravel/ThinkPHP
+- 数据库相关：Postgres/MySQL/SQLite/Redis/Elasticsearch
+- 消息队列：Rabbitmq
+- 工具：Git/Svn/Swagger/Proto
+- 容器相关：K8s/Helm/Docker/Docker-compose/Docker-swarm
+- 微服务相关: Zookeeper/Etcd/Grpc/Go-micro
 - 单元测试：GoTest/PHPUnit
 - 开放平台：微信应用开发
 - 外语：大学英语四级，能流畅阅读英文文档
 
 
 ## 总结
-技术扎实、工作负责、精力充沛，期待能有机会和你共事。
+技术扎实、工作负责、精力充沛、正当编程的黄金年龄，期待能有机会和你共事。
