@@ -819,3 +819,360 @@ gc 停了所有的p 在等待 main函数占有的p， fmt.Println 涉及io,会�
 _Pruning 抢占通常是由于一些类似死循环的计算逻辑引起的  
 
 
+# 泛型
+对于一个函数，我们不应该限定它的类型，让调用者自己去定义类型      
+在定义函数的时候，类型不确定  
+
+## 泛型作用
+泛型减少重复代码并提高类型安全性    
+针对不同的数据类型使用相同的代码逻辑 
+
+## 泛型使用范围
+* 泛型类型：类型定义中带类型形参的类型，slice,map,struct,channel
+* 泛型receiver
+* 泛型函数
+
+
+## 泛型的实现
+泛型在编译阶段会为每个类型生成对应的代码，但如果是同类型衍生出来的代码只会生成一份，使用泛型字典 goshape 存储类型
+
+
+
+# Channel
+ch:=make(chan int,5)    
+ch是存在于函数栈帧上的一个指针，指向堆上的hchan数据结构   
+
+## Channel 需要那些功能
+1. channel需要支持协程并发访问，需要一把锁 mutex
+2. 对于有缓冲channel来讲，需要知道缓冲区在哪儿，已经存储了多少个元素，最多存储多少个元素，每个元素占多大空间，实际上缓存区就是一个数组
+3. golang运行时中，内存复制，垃圾回收等机制，依赖数据的类型信息，所以hchan这里还需要有一个指针，指向元素类型的类型元数据
+4. channel需要分别记录读写下标位置，当读写不能立即完成时需要立即让当前协程在channel等待，待条件满足时要能立即唤醒等待的协程
+5. 需要有两个等待队列分别记录，读和写
+6. channel 能够close,所以还要记录他的关闭状态
+
+```go
+package main
+
+import "unsafe"
+
+type hchan struct {
+   qcount   uint //缓存区存在的元素数量
+   dataqsiz uint //缓冲区的大小
+   buf      unsafe.Pointer //缓冲区的地址
+   elemsize uint16 //缓冲区元素大小
+   closed uint32 //关闭标识
+   elemtype *_type  //指针，指向缓冲区元素类型的类型元数据
+   sendx uint //缓冲区发送的下标
+   recvx uint //缓冲区接受的下标
+   recvq waitq //缓冲区读队列
+   sendq waitq //缓冲区写队列
+   lock mutex //互斥锁
+}
+```
+
+## 发送
+不阻塞：  
+1. 缓冲区有空闲位置
+2. 无缓冲区，有协程在等待接受数据，换句话说，接受队列不为空
+
+阻塞：  
+1. channel为nil
+2. 无缓冲区 && 没有协程在等待接受数据
+3. 有缓冲区，但缓冲区已耗尽
+
+## 接受
+不阻塞：
+1. 缓冲区有数据
+2. 无缓冲区，有协程正在发送数据，换句话说，发送队列不为空
+
+阻塞：  
+1. channel 为nil
+2. 无缓冲区 && 没有协程正在发送数据
+3. 有缓冲区 缓冲区为空
+
+
+## 发送写法
+```go
+// 阻塞式写法
+ch<-10
+
+// 非阻塞式写法
+select {
+case ch<-10:
+
+default:
+
+}
+```
+
+## 接受写法
+
+阻塞时写法:  
+```go
+// 这种写法会将结果丢弃
+<-ch
+
+// 赋值v
+v:=<-ch
+
+//command ok 风格 ,ok为false表示集群已关闭
+v,ok:=<-ch 
+
+//
+
+
+```
+> 当一个有缓冲区的channel关闭，command ok风格的写法，直到缓冲区为空 ok才会变为false ，也就是说channel不会去丢弃数据
+
+非阻塞式写法:  
+```go
+select{
+case <-ch:
+default:	
+}
+
+```
+
+## channel关闭原则
+在使用Go channel的时候，一个适用的原则是不要从接收端关闭channel，也不要关闭有多个并发发送者的channel。换句话说，如果sender(发送者)只是唯
+一的sender或者是channel最后一个活跃的sender，那么你应该在sender的goroutine关闭channel，从而通知receiver(s)(接收者们)已经没有值可以读了。
+维持这条原则将保证永远不会发生向一个已经关闭的channel发送值或者关闭一个已经关闭的channel。
+
+## 多路select的过程
+1. 按序加锁
+2. 乱序轮询
+3. 挂起等待
+4. 按序解锁
+5. 唤醒执行
+6. 按序加锁
+7. 离开队列
+8. 按序解锁
+9. 返回
+
+
+# 堆内存管理
+因为程序运行起来所需要分配的内存块，有大有小，而分散的大小不一的碎片化内存，一方面可能降低内存的使用率，另一方面，要找到内存合适的内存块会因为
+碎片化而增加   
+
+为降低碎片化内存给程序造成的不良影响，go 语言采用了 Tcmalloc(对抗内存碎片化的优秀内存分配器) 相似的算法。  
+
+简单来讲 ：  
+按照一组预置的大小规格把内存页划分成块，然后把不同规格的内存块放入对应的空闲链表中，程序申请内存时，分配器会先根据要申请的内存大小，找到最匹配
+的内存块，然后从对应的空闲链表中分配一块内存块  
+go1.16中给出了67种规格，8B->32KB
+
+## 堆内存成员
+### area (64MB)
+go runtime将堆地址空间划分成 一个个的area ,area的起始地址被定义为常量 areaBaseOffset   
+amd64 linux环境下，每个area的大小为64MB   
+
+### page (8KB)
+每个area包含8192个page
+
+### span
+在一个area中会划分成不同的span ，每个span 包含一组连续的page，并且按照特定规格，划分成等大的内存块
+
+
+area,span,page,内存块，共同构成了堆内存，在堆内存之外有一大票用于管理堆内存的数据结构  
+
+
+# Golang内存管理
+参考：[Golang内存管理—内存分配器](https://juejin.cn/post/7249286405007507493)
+## 简介
+程序中的数据都会被分配到程序所在的虚拟内存中，内存空间包含两个重要区域：栈（Stack） 和 堆（Heap）。  
+函数调用的参数、返回值和局部变量大部分会分配在栈上，这部分由编译器管理。堆内存的管理方式视语言而定：  
+* C/C++等编程语言的堆内存由工程师主动申请和释放；
+* Go、Java等编程语言由工程师和编译器/运行时共同管理，其内存由内存分配器分配，由垃圾回收器回收。
+
+## Go内存分配设计原理
+Go内存分配器的设计思想来源于TCMalloc，全称是Thread-Caching Malloc，核心思想是把内存分为多级管理，利用缓存的思想提升内存使用效率，降低锁的粒度。
+![](go硬核干货/img_14.png)  
+
+如上图所示，是Go的内存管理模型示意图，在堆内存管理上分为三个内存级别：
+* 线程缓存（MCache）：作为线程独立的内存池，与线程的第一交互内存，访问无需加锁；
+* 中心缓存（MCentral）：作为线程缓存的下一级，是多个线程共享的，所以访问时需要加锁；
+* 页堆（MHeap）：中心缓存的下一级，在遇到32KB以上的对象时，会直接选择页堆分配大内存，而当页堆内存不够时，则会通过系统调用向系统申请内存。
+
+### 内存管理基本单元mspan
+```go
+//go:notinheap
+type mspan struct {
+   next *mspan     // next span in list, or nil if none
+   prev *mspan     // previous span in list, or nil if none
+   list *mSpanList // For debugging. TODO: Remove.
+   
+   startAddr uintptr // address of first byte of span aka s.base()
+   npages    uintptr // number of pages in span
+   
+   
+   freeindex uintptr
+   
+   allocBits  *gcBits
+   gcmarkBits *gcBits
+   allocCache uint64
+   ...
+}
+```
+runtime.mspan是Go内存管理的基本单元，其结构体中包含的next和prev指针，分别指向前后的runtime.mspan，所以其串联后的结构是一个双向链表。
+
+而startAddr表示此mspan的起始地址，npages表示管理的页数，每页大小8KB，这个页不是操作系统的内存页，一般是操作系统内存页的整数倍。  
+
+其它字段：  
+* freeindex — 扫描页中空闲对象的初始索引；
+* allocBits 和 gcmarkBits — 分别用于标记内存的占用和回收情况；
+* allocCache — allocBits 的补码，可以用于快速查找内存中未被使用的内存；
+
+注意使用//go:notinheap标记次结构体mspan为非堆上类型，保证此类型对象不会逃逸到堆上。  
+![](go硬核干货/img_15.png)  
+
+
+### 跨度类 spanClass
+在mspan中有一个字段是spanclass，称为跨度类，是对mspan大小级别的划分，每个mspan能够存放指定范围大小的对象，32KB以内的小对象在Go中，会对应
+不同大小的内存刻度Size Class，Size Class和Object Size是一一对应的，前者指序号 0、1、2、3，后者指具体对象大小 0B、8B、16B、24B
+```go
+//go:notinheap
+type mspan struct {
+   ...
+   spanclass   spanClass     // size class and noscan (uint8)
+   ...
+}
+```
+spanClass 高7位标记内存块大小规格编号，1-67（8B-32KB）,编号0留出来，对应大于32K的大块内存，一共68种，然后每种规格会按照是否需要gc扫描，用
+最低位来标识，分为包含指针的需要gc扫描的scannable和不含指针的noscan 两类，所以有68*2=136种 span
+
+Go 语言的内存管理模块中一共包含 67 种跨度类，每一个跨度类都会存储特定大小的对象并且包含特定数量的页数以及对象，所有的数据都会被预选计算好并存储
+在runtime.class_to_size和runtime.class_to_allocnpages等变量中：
+![](go硬核干货/img_16.png)  
+
+上表展示了对象大小从 8B 到 32KB，总共 67 种跨度类的大小、存储的对象数以及浪费的内存空间，以表中的第四个跨度类为例，跨度类为 5 的runtime.mspan中
+对象的大小上限为 48 字节、管理 1 个页、最多可以存储 170 个对象。因为内存需要按照页进行管理，所以在尾部会浪费 32 字节的内存，当页中存储的对象都是 33 字节时，最多会浪费 31.52% 的资源：
+((48−33)∗170+32)/8192=0.31518   
+![](go硬核干货/img_17.png)  
+除了上述 67 个跨度类之外，运行时中还包含 ID 为 0 的特殊跨度类，它能够管理大于 32KB 的特殊对象。  
+
+
+### 线程缓存（mcache）
+runtime.mcache是Go语言中的线程缓存，它会与线程上的处理器意义绑定，用于缓存用户程序申请的微小对象。每一个线程缓存都持有numSpanClasses个（68*2）个mspan，
+存储在mcache的alloc字段中：
+```go
+//go:notinheap
+type mcache struct {
+   ...
+
+   alloc [numSpanClasses]*mspan // spans to allocate from, indexed by spanClass
+
+   ...
+}
+```
+68*2 这里之所以乘以2的目的是 mspan划分了2类，一类是需要gc扫描的scanable，另一类是不需要gc的noscanable类 
+
+其图示如下：
+
+![](go硬核干货/img_18.png)  
+
+###  中心缓存（mcentral）
+
+每个中心缓存都会管理某个跨度类的内存管理单元，它会同时持有两个runtime.spanSet，分别存储包含空闲对象和不包含空闲对象的内存管理单元，访问中心缓
+存中的内存管理单元需要使用互斥锁。
+
+```go
+//go:notinheap
+type mcentral struct {
+   spanclass spanClass
+   partial [2]spanSet // list of spans with a free object 有空闲对象
+   full    [2]spanSet // list of spans with no free objects 无空闲对象
+}
+```
+spanSet有两种，1是已清扫的，2是未清扫的
+![](go硬核干货/img_19.png)  
+
+
+### 页堆（mheap）  
+```go
+//go:notinheap
+type mheap struct {
+   ...
+   arenas [1 << arenaL1Bits]*[1 << arenaL2Bits]*heapArena
+   ...
+   central [numSpanClasses]struct {
+      mcentral mcentral
+      pad      [cpu.CacheLinePadSize - unsafe.Sizeof(mcentral{})%cpu.CacheLinePadSize]byte
+   }
+   ...
+}
+```
+runtime.mheap是内存分配的核心结构体，其最重要的两个字段如上。
+
+在Go中其被作为全局变量mheap_存储：
+```go
+var mheap_ mheap
+```
+
+页堆中包含一个长度为numSpanClasses个 (68*2) 个的runtime.mcentral数组，其中 68 个为跨度类需要 scan 的中心缓存，另外的 68 个是 noscan 
+（没有指针，无需扫描）的中心缓存。
+
+arenas是heapArena的二维数组的集合。如下：
+![](go硬核干货/img_20.png)  
+
+其中二维数组占用8192*64M=512G的空间
+![](go硬核干货/img_21.png)  
+预申请的内存为：  
+* spans 存放span的指针对应page的位置，共需要（512G/8KB）*8byte=512M
+* bitmap 主要用于gc，其中一个字节可以用来标记4个指针大小的位置，低4位用于标记是指针还是标量，高4位用于标记这块内存空间后续是否需要gc扫描，（512G/(4*8)）=16G
+* 堆区，共512G,包含8192*64M=512G  ，8192个page*8KB=64MB
+
+## 内存分配过程
+mallocgc负责堆分配的关键函数，runtime的new和make都依赖它， 主要逻辑分为4个部分
+
+### 辅助gc
+如果程序申请堆内存时正处于gc标记阶段，当下分配的堆内存还没标记完，又要分配新的堆内存，如果内存申请的速度超过gc标记的速度，那就有问题。  
+申请一字节内存空间，需要做多少扫描工作，或者说完成一字节扫描工作后可以分配多大的内存空间，是根据gc扫描的进度更新计算的。  
+每次执行辅助gc 最少要扫描64KB，协程每次执行辅助扫描gc时多出来的部分会作为信用存储到当前G中，下次分配内存时，有额度可以直接使用，不用再辅助gc    
+
+窃取信用  
+后台的gc mark worker 执行扫描任务，会在全局的gcController这里积累信用，如果能够窃取足够多的信用值，来抵消当前协程背负的债务，那就不用执行
+辅助gc了
+
+### 空间分配
+![](go硬核干货/img_22.png)
+
+* 小于16B并且是noscan类型的内存分配请求会执行 tiny allocator
+* 大于32KB包括 noscan和scannable类型 都会采用大块内存分配器
+* [16B,32KB]的nosacn类型以及 小于32KB的scanable的内存分配请求，都会直接匹配预置的大小规格来分配
+
+大于32KB的规格需要额外处理，因为预制的内存最大规格才32kb，会直接根据需要的页面树 分配一个新的span
+
+tiny allocator 为了减少浪费,如果需要连续分配16次1字节的内存，tiny allocator能够将几个小块的内存分配请求合并，16次1字节的内存分配请求可以
+合并到1个16字节的内存块中，可以提高内存使用率   
+
+每个P的mcache中有专门用于tiny allocator的内存，是一个16字节大小的内存单元 
+
+### 位图标记
+通过一个堆内存地址，如何找到对应的heapArea和msapn  
+
+#### 已知内存地址p，arenaBaseOffset,求arena的编号
+![](go硬核干货/img_23.png)
+
+
+#### 已知 amd64架构的linux环境，一个arena大小和对其边界64M，虚拟地址空间中的线性地址有48位，求这么大的空间可以划分为多少个arena?
+![](go硬核干货/img_24.png)
+
+
+如果我们直接把*heapArea放到一个数组中，并用arena的编号作为索引那这个数组的大小就是4M个*8B=32M   
+但是在amd64架构的windows环境下一个arena的大小只有4M（arena的大小和MMA,虚拟内存管理的页大小有关）那就有2^48/4M=64M个arena，那这个数组的
+大小就是 : 64M个*8B=512M者就有点大了  
+
+所以go的开发者将*heapArea 放到了一个二维数组里，所以寻址arena不能直接使用arena的编号直接索引，而需要根据arena编号计算出一个arenaIdx
+它本质上是个uint, amd64 windows下，areans数组第一维有64个元素，所以arenaIdx第一维有6位，第二维的数组长度为1M=2^20  
+
+> 这样处理后，数组只用找8M的空间来存，512M的连续空间有点不好找
+
+![](go硬核干货/img_25.png)
+
+
+### 收尾工作
+* 如果当前处于gc标记阶段，需要对新分配的对象进行gc标记
+* 如果这次内存分配达到来gc的触发条件，还会触发新一轮的gc
+
+
+
