@@ -18,15 +18,6 @@ func SelectSort(arr []int) {
 		}
 
 		//与当前位置交换
-		swap(arr, i, minIndex)
+		arr[i], arr[minIndex] = arr[minIndex], arr[i]
 	}
-
-}
-
-func swap(arr []int, i, j int) {
-	if i == j {
-		return
-	}
-
-	arr[i], arr[j] = arr[j], arr[i]
 }
