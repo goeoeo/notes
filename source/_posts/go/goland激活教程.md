@@ -2,7 +2,7 @@
 categories: 
 - go
 tags:
-- goland激活
+- goland
 ---
 提供三种方式进行激活
 ## 申请使用License（推荐）
