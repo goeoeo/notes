@@ -1,3 +1,12 @@
+---
+title: k8s踩坑日志
+categories:
+- k8s
+
+tags:
+- k8s
+---
+
 # pvc挂载不上pv
 * annotations 不一致会影响pvc的挂载
 

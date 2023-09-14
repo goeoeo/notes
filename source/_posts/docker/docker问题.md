@@ -1,3 +1,13 @@
+---
+title: docker问题
+
+categories: 
+- docker
+
+tags:
+- docker-install-ware
+---
+
 # docker本地空间足够，但容器日志提示空间不足
 
 ## 情况描述
@@ -6,6 +16,7 @@
 ```
 Elasticsearch：high disk watermark [90%] exceeded
 ```
+<!--more-->
 
 ## 处理
 修改配置   

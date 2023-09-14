@@ -1,4 +1,5 @@
 ---
+title: gitlab_runner
 categories:
 - git
 

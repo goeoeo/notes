@@ -1,4 +1,6 @@
 ---
+title: mysql操作
+
 categories:
 - mysql
 

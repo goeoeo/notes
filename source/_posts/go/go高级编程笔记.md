@@ -1,5 +1,6 @@
-
 ---
+title: go高级编程笔记
+
 categories: 
 - go
 ---

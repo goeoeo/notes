@@ -1,4 +1,5 @@
 ---
+title: go内存管理
 categories: 
 - go
 tags:

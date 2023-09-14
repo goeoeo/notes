@@ -1,7 +1,8 @@
 ---
+title: MySQL查看连接数(连接总数、活跃数、最大并发数)
+
 categories:
 - db
-
 
 tags:
 - mysql

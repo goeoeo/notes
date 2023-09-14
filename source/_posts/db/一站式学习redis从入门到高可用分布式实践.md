@@ -1,7 +1,11 @@
 ---
+title: 一站式学习redis从入门到高可用分布式实践
+
 categories: 
 - redis
 
+tags:
+- redis 
 ---
 
 

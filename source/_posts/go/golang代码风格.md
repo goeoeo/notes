@@ -1,4 +1,6 @@
 ---
+title: golang代码风格
+
 categories:
 - go 
 

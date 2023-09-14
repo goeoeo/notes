@@ -1,5 +1,5 @@
-
 ---
+title: 如何写出优雅的Go语言代码
 categories:
 - go
 tags:

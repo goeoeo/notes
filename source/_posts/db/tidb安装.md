@@ -1,4 +1,6 @@
 ---
+title: tidb安装
+
 categories:
 - tidb
 

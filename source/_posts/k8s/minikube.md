@@ -1,4 +1,5 @@
 ---
+title: minikube
 categories:
 - k8s
 tags:

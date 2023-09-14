@@ -1,4 +1,5 @@
 ---
+title: ubuntu 安装各种软件
 categories: 
 - linux
 tags:

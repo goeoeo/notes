@@ -1,4 +1,5 @@
 ---
+title: golang编程规范
 categories:
 - go
 

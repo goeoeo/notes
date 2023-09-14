@@ -1,4 +1,5 @@
 ---
+title: gnome桌面美化
 categories:
 - linux
 

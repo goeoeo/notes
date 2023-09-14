@@ -1,7 +1,8 @@
 ---
+title: TIDB基础
+
 categories: 
 - tidb
-
 
 tags:
 - tidb

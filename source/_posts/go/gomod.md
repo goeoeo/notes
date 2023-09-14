@@ -1,4 +1,5 @@
 ---
+title: gomod
 categories: 
 - go
 tags:

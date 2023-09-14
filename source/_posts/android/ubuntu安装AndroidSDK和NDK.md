@@ -1,3 +1,12 @@
+---
+title: ubuntu安装AndroidSDK和NDK
+categories: 
+- android
+tags:
+- android
+---
+
+
 # 安装java 
 参考:  
 https://medium.com/@barcelos.ds/install-openjdk-11-lts-in-the-ubuntu-20-04-lts-2c06f17c990
@@ -9,6 +18,8 @@ sudo mkdir ~/DevTools
 sudo mkdir ~/DevTools/JDK
 sudo tar -zxvf ~/下载/OpenJDK11U-jdk***tar.gz -C ~/DevTools/JDK/
 ```
+
+<!--more-->
 
 ## 设置JAVA_HOME环境变量
 ```

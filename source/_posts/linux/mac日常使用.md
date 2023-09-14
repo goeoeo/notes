@@ -1,4 +1,5 @@
 ---
+title: mac日常使用
 categories:
 - linux
 

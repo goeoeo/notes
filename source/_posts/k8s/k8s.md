@@ -1,4 +1,5 @@
 ---
+title: k8s
 categories:
 - k8s
 

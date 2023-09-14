@@ -1,4 +1,6 @@
 ---
+title: golangci-lint
+
 categories:
 - go
 

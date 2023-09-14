@@ -1,4 +1,6 @@
 ---
+title: 快速认识Git
+
 categories:
 - git 
 

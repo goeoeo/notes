@@ -1,4 +1,5 @@
 ---
+title: rabbitmq
 categories: 
 - docker
 tags:

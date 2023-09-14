@@ -1,4 +1,5 @@
 ---
+title: RabbitMQ认识与实践
 categories:
 - mq 
 

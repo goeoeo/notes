@@ -1,4 +1,6 @@
 ---
+title: MySQL索引15问
+
 categories: 
 - mysql
 tags:

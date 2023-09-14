@@ -1,4 +1,5 @@
 ---
+title: go优缺点
 categories:
 - go
 

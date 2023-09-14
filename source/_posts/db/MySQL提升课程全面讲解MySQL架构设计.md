@@ -1,4 +1,6 @@
 ---
+title: MySQL提升课程全面讲解MySQL架构设计
+
 categories: 
 - mysql
 tags:

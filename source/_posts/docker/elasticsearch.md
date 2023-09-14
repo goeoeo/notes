@@ -1,4 +1,12 @@
+---
+title: elasticsearch
 
+categories: 
+- docker
+
+tags:
+- docker-install-ware
+---
 # docker安装elasticsearch7.7.0
 
 

@@ -1,4 +1,6 @@
 ---
+title: 如何利用nginx进行自动化负载均衡
+
 categories: 
 - nginx
 

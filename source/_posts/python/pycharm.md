@@ -1,4 +1,5 @@
 ---
+title: pycharm
 categories:
 - python
 

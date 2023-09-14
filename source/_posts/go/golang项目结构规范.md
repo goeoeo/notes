@@ -1,5 +1,5 @@
-
 ---
+title: golang项目结构规范
 categories:
 - go 
 

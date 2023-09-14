@@ -1,4 +1,5 @@
 ---
+title: gitlab配置代码覆盖率
 categories:
 - git
 

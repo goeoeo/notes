@@ -1,3 +1,13 @@
+---
+title: docker-machine
+
+categories: 
+- docker
+
+tags:
+- docker-install-ware
+---
+
 ## 下载
 ```
 base=https://github.com/docker/machine/releases/download/v0.16.0 &&
@@ -5,6 +15,7 @@ base=https://github.com/docker/machine/releases/download/v0.16.0 &&
   sudo mv /tmp/docker-machine /usr/local/bin/docker-machine &&
   chmod +x /usr/local/bin/docker-mach
 ```
+
 ### 网速慢
 使用xx_net代理
 ```

@@ -1,4 +1,5 @@
 ---
+title: 通过Docker安装配置MySQL主从节点
 categories: 
 - mysql
 
