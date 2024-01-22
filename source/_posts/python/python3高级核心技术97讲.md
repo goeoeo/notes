@@ -173,3 +173,71 @@ abc模块定义了可变序列以及不可变序列的协议（类必须实现�
 ## 可切片的对象
 
 ## bisect维护已排序序列
+用于向列表插入数据，并且维护列表的顺序性
+
+## 什么时候我们不应该使用列表
+* array和list的区别，array只能存储指定类型的值
+* dqueue
+
+## 列表推导式，生成器表达式，字典推导式
+### 列表推导式
+```python
+# 提取1-20之间的奇数
+odd_list=[i for i in range(21) if i%2==1]
+
+# 复杂情况
+def handle_item(item):
+    return item*item
+
+odd_list=[handle_item(i) for i in range(21) if i%2==1]
+```
+逻辑简单可以用列表生产式，如果逻辑过于复杂不建议用列表生成式  
+
+### 生成器表达式
+```python
+odd_gen=(i for i in range(21) if i%2==1)
+odd_list=list(odd_gen)
+
+```
+
+### 字典推导式
+```python
+# 字典推导式
+my_dict={"a":1,"b":2,"c":3}
+reversed_dict={value:key for key,value in my_dict.items()}
+```
+
+### 集合推导式
+```python
+my_dict={"a":1,"b":2,"c":3}
+my_set={key for key,value in my_dict.items()}
+```
+
+
+# 深入python的set和dict
+## dict 常用方法
+* dict.copy 浅拷贝，copy.deepcopy 深拷贝
+* dict.fromkeys 将可迭代的对象转换成dict
+* dict.get 可以避免KeyError错误
+* dict.item 返回，key,value 用于迭代中
+* dict.setdefault 获取值，如果不存在则会设置
+* dict.update 接受可迭代对象
+
+## dict 子类
+* collections.UserDict
+* collections.defaultdict
+
+## set和frozenset
+set 集合，frozenset 不可变集合    
+不重复，无序  
+### set
+* set.update 合并两个
+* set.difference 求差集
+* ｜ & -  集合运算
+* set 用C语言实现，性能很高，hash实现，查找元素时间复杂度为O(1)
+* set.issubset 判定是否为另外一个set的子集
+### frozenset 
+其不可变性，可以作为dict的key  
+
+
+## dict和set的实现原理

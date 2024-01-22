@@ -57,6 +57,7 @@ AHD9079DKZ-eyJsaWNlbnNlSWQiOiJBSEQ5MDc5REtaIiwibGljZW5zZWVOYW1lIjoiSmV0IEdyb3Vwc
 * Protobuf Buffer Editor #proto语法提示
 * Translation # 翻译
 * Goanno #文档注释插件 ctrl+alt+/
+* GitToolBox #显示git提交信息
 
 # 快捷键
 * Ctrl+Shift+T #快速生成测试文件
