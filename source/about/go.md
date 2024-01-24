@@ -8,10 +8,10 @@
 
 - 陈誉/男/1994 
 - 本科/西华大学建筑系 
-- 工作年限：7年  
+- 工作年限：8年  
 - 技术博客：https://goeoeo.github.io
-- 期望职位：Go高级程序员
-- 期望薪资：25k~30K
+- 期望职位：Golang高级程序员
+- 期望薪资：35k~40K
 - 期望城市：成都
 
 
@@ -146,17 +146,17 @@
 以下均为我熟练使用的技能
 
 - 开发环境：Linux
-- 语言：Go/PHP
+- 语言：Go/PHP/Python
 - 框架：Benchmark(自研微服务框架)/Gin/Beego/Laravel/ThinkPHP
 - 数据库相关：Postgres/MySQL/SQLite/Redis/Elasticsearch
-- 消息队列：Rabbitmq/Kafka
+- 消息队列：Rabbitmq
 - 工具：Git/Svn/Swagger/Proto
-- 容器相关：K8s/Helm/Docker/Docker-compose/Docker-swarm
-- 微服务相关: Zookeeper/Etcd/Grpc/Go-micro
-- 单元测试：GoTest/PHPUnit
+- 容器相关：K8s/Helm/Docker/Docker-compose
+- 微服务相关: Grpc/ServiceMesh/Etcd/Zookeeper
+- 单元测试：GoTest/PyTest/PHPUnit
 - 开放平台：微信应用开发
+- 前端：Html5/JavaScript/Css/angular
 - 外语：大学英语四级，能流畅阅读英文文档
-
 
 # 总结
 技术扎实、工作负责、精力充沛、期待能有机会和你共事。
