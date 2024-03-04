@@ -855,7 +855,6 @@ SHOW VARIABLES LIKE '%max_length_for_sort_data%';
 
 l 但是如果设的太高，数据总容量超出sort_buffer_size的概率就增大，明显症状是高的磁盘I/O活动和低的处理器使用率。如果需要返回的列的总长度大于max_length_for_sort_data，使用双路算法，否则使用单路算法。1024-8192字节之间调整
 
-## 
 
 ## 044  		group by 分组和order by在索引使用上有什么区别？
 

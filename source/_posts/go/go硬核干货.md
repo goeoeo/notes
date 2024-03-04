@@ -596,13 +596,50 @@ go 语言的垃圾回收采用标记清扫算法，支持主体并发式增量�
 
 ![img.png](go硬核干货/img_11.png)
 
+
+
+##  GC过程
+1. GC准备阶段,为每个p创建MarkWorker协程（很快会休眠，_Gwaiting）
+2. 第一次STW,记录GC阶段为_GCMark,同时开启写屏障
+   * gcBlackenEnable=1  是否允许gc扫描
+   * writeBarrier.enabled=true 开启写屏障
+   * gcphrase=_GCMark 标识GC阶段为 标记阶段
+3. MarkWorker开始根据p的调度进行标记工作，直到标记完成
+4. 第二次STW，停止标记，关闭写屏障
+   * gcBlackenEnable=0 停止标记
+   * writeBarrier.enabled=false 关闭写屏障
+   * gcphrase=_GCMarkTermination
+
+5. 开始清扫（清扫也是增量进行，每轮gc开始之前，需要保证上一次清扫已经完成
+
+## GC标记过程实现 gcw&wbBuf
+GC标记需要扫描的对象会加入到工作队列中，由后台MarkWorker来消息队列：  
+1. 全局工作队列
+2. 本地工作队列，包含wbuf1,wbuf2。 先加入wbuf1,再加入wbuf2,当wbuf2满了，就加入全局工作队列  
+
+每个P有一个写屏障缓冲区 wbBuf,写屏障触发时，会加入到这个缓存区中，通过flush 刷入工作队列中
+
+## GC CPU使用用率（决定MarkWork 可以启动的个数）
+GC 默认cpu使用率为25%  
+workCount=gomaxprocs* 25%，如果计算出来不是整数，需要向上取整，例如取出来的值时1.5，则会取2，如果这个向上取整的数值与原目标比较超过0.3（0.5/1.5>0.3）,那多出来的这个worker就会
+进入fraction模式，加入cpu核数时6，那每个cpu再fraction模式下的工作目标就是 0.5/6=1/12，GC Worker有两种模式：
+* Dedicated 完全占用模式，直到调度器调度 
+* Fraction 非完全占用模式，Mark时间会均摊到每个p上以合计到达 1/12这个目标（p的work时间=Fraction模式的时间/总的Mark的时间），如果当前P到了目标就会让出cpu
+
+## GC 过程中GC内存分配
+为避免GC过程的内存分配压力过大，GO语言有 GC Assist(辅助GC)，如果GC过程中协程要分配内存，它需要负担一部分GC标记工作，要申请的内存越大，那对应要
+负担的标记任务也多（借贷偿还机制，你申请了内存，那就得你去释放内存），有负债的G在成功申请内存前，需要辅助gc完成一些标记工作，来偿还债务   
+
+后台的MarkWorker 每完成一定量的标记任务就会在全局gcController中存一笔信用，有债务需要偿还的G可以在gcController这里偷取信用来偿还债务  
+
+gc标记阶段，每次分配内存，都会检查当G是否需要辅助GC，到GC清扫阶段，内存分配也会触发辅助清扫
+
+辅助标记和辅助清扫，可以避免因过大的内存分配压力，导致GC来不及回收的情况（GC标记的速度没有分配的速度快，就永远标记不完）
+
 ## GC 触发方式
 * 手动触发 runtime.GC
 * 分配内存，每次GC都会在标记结束后设置下一次触发gc的内存分配量，分配大对象或者从mcentral获取空闲内存时，会判断是否达到了这个值
-* sysmon 系统监控，达到一定的时间间隔，强制执行gc
-* 分配对象大小超过默认大小：Golang 的垃圾回收器将小对象与大对象分开处理。如果程序分配的对象大小超过了垃圾回收器的默认大小，就会触发垃圾回收
-
-
+* sysmon 系统监控，达到一定的时间间隔，强制执行gc,默认是2分钟
 
 # Mutex
 ```go
@@ -1053,7 +1090,7 @@ Go 语言的内存管理模块中一共包含 67 种跨度类，每一个跨度�
 
 
 ### 线程缓存（mcache）
-runtime.mcache是Go语言中的线程缓存，它会与线程上的处理器意义绑定，用于缓存用户程序申请的微小对象。每一个线程缓存都持有numSpanClasses个（68*2）个mspan，
+runtime.mcache是Go语言中的线程缓存，它会与线程上的处理器一一绑定，用于缓存用户程序申请的微小对象。每一个线程缓存都持有numSpanClasses个（68*2）个mspan，
 存储在mcache的alloc字段中：
 ```go
 //go:notinheap
