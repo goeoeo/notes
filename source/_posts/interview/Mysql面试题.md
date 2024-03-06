@@ -901,7 +901,9 @@ EXPLAIN SELECT * FROM emp WHERE emp.name IS NOT NULL
 
 ![image-20221028155608009](Mysql面试题/image-20221028155608009.png)
 
-## ![img](Mysql面试题/29f7e85dea17e100b38b450d9949a330.png)047 Mysql内部支持缓存查询吗？
+![img](Mysql面试题/29f7e85dea17e100b38b450d9949a330.png)
+
+## 047 Mysql内部支持缓存查询吗？
 
 当MySQL接收到客户端的查询SQL之后，仅仅只需要对其进行相应的权限验证之后，就会通过Query Cache来查找结果，甚至都不需要经过Optimizer模块进行执行计划的分析优化，更不需要发生任何存储引擎的交互
 
