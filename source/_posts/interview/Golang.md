@@ -1,3 +1,11 @@
+---
+title: Golang
+categories: 
+- interview
+tags:
+- 面试题
+---
+
 # 字符串
 * 字符串的结构 ptr+len
 * utf8字符集 (0一个字节，10两个字节，110三个字节)
