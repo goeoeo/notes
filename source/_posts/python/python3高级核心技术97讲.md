@@ -310,3 +310,165 @@ class FirstMetaClass(type):
 1. type函数
 2. class 关键字
 3. meteclass 元类
+
+# python中的迭代协议
+## python中的迭代器和迭代协议
+迭代是一种重复访问集合元素的方式，而迭代器和迭代协议是实现这一功能的核心机制。   
+迭代器是一个可以记住遍历的位置的对象，而迭代协议则是一种约定，规定了迭代器应该如何工作。  
+
+
+## 迭代器（Iterator）
+迭代器是一个实现了迭代器协议的对象，它必须包含__iter__()和__next__()这两个方法。其中，__iter__()方法返回迭代器对象本身，如果类定义了__iter__()，那么它的实例对象就是一个迭代器；__next__()方法返回容器的下一个值，如果容器中没有更多元素了，那么抛出StopIteration异常。
+
+## 可迭代对象（Iterable）
+实现了__iter__方法，能够循环取值的对象即为可迭代对象，与迭代器的区别是，迭代器会存储当前迭代的位置，可迭代对象不会，例如 list   
+当一个对象很大的时候,所占用的内存需要1G,那要对这个对象进行迭代，不能吧1G的数据直接载入内存中，而是通过迭代器的方式去访问数据  
+
+## iter 函数
+iter函数，会尝试将一个对象转化为一个迭代器。如果对象实现了__iter__函数，会有限调用这个，如果不存在，就是尝试调用__getitem__函数，来完成迭代器的创建
+
+
+## 生成器
+生成器函数，函数里只要有yield关键字  
+具有yield关键字的函数，返回的是genreate对象   
+
+## 生成器的原理
+python的函数栈桢对象是分配在堆内存中的，即不会自动释放内存
+每次遇到yield 函数就会停止执行，下一次执行的时候，在停止的地方继续执行  
+生成器可以被next函数调用  
+
+## 生成器在UserList中的应用
+
+## 生成器如何读取大文件
+```python
+def read_big_file(f,splitStr):
+    buf=""
+    while True:
+        while splitStr in buf:
+            pos= buf.index(splitStr)
+            yield buf[:pos]
+            buf=buf[pos+len(splitStr):]
+        chunk=f.read(2)
+
+        if not chunk:
+            #已经读到了最后
+            yield buf
+            break
+        buf+=chunk
+
+
+
+if __name__=="__main__":
+    with open('bigfile.txt') as f:
+        for chunk in read_big_file(f,","):
+            print(chunk)
+```
+
+
+# python socket编程
+## HTTP,Socket,TCP 
+* HTTP 应用层协议基于TCP
+* TCP 传输层协议
+* Socket 建立连接的工具
+
+## socket编程中 client与server实现通信
+![](python3高级核心技术97讲/img_1.png)
+
+
+## socket实现聊天和多用户连接
+
+## socket发送http请求
+
+
+# 多线程，多进程和线程池编程
+## python GIL锁 
+gil global interpreter lock (cpython)  
+python中一个线程对应c语言中的一个线程   
+gil 使得同一个时刻只有一个线程在一个cpu上执行字节码，无法将多线程映射到多个cpu上，无法利用多核
+
+### 什么时候 GIL锁会释放
+* 根据执行的字节码行数以及时间片到了
+* 遇到有io操作
+
+## 多线程编程-threading
+多线程编程的几种方式
+### import threading
+对于io操作来说，多线程和多进程性能差别不大    
+* thread.setDaemon 守护线程，设置守护线程后，主线程不会等待线程，直接会退出
+* thread.join 等待线程执行完成后，才会继续往下执行
+
+### 通过集成Thread来实现多线程
+
+## 线程间通信
+### 共享变量
+共享变量通信的方式，是非线程安全的，需要加锁
+### Queue
+线程间通信推荐方式，类比 golang中的 channel     
+golang 中推行的Communicating Sequential Processes（CSP）模型，并发编程的推荐通信方式（1978年推出）  
+CSP模型的核心是“不要通过共享内存来通信，而是通过通信来共享内存”  
+
+
+## 线程同步
+### Lock 
+互斥锁，golang中为Mutex  
+锁带来的问题：  
+1. 用锁会影响性能
+2. 可能有死锁问题，死锁问题在golang编译过程中会报错
+```
+# 相互等待，导致的死锁
+A acquire(a), acquire(b)
+B acquire(b), acquire(a)
+
+# 重复调用导致的锁
+A acquire(a), acquire(a)
+
+# A调用B
+A acquire(a)
+B acquire(a)
+```
+### RLock
+为解决 A调用B,或重复调用导致的锁问题 ,设计出可重入的锁  RLock   
+在相同的线程中，可以连续多次调用acquire, acquire的次数要和release的次数相同 （内部应该有一个计数器，以及线程ID）  
+golang中没有可重入的锁，原因应该是和GMP模型有关，golang中的协程与线程是M:N的关系，
+
+### Condition 
+条件变量，复杂的线程同步  
+在调用with cond之后才能调用wait或notify 方法  
+condition有两层锁，一把底层RLock锁，在线程调用了wait方法的时候释放   
+每次调用wait时会分配一把锁放入到cond的等待队列中，等待notify方法的唤醒  
+
+### Semaphore
+用于控制并发数量  
+基于Condition
+
+
+## ThreadPoolExector 线程池
+concurrent  
+频繁的创建以及销毁线程，会消耗资源，所以需要线程池    
+主线程中可以获取某一个线程的状态或者某一个任务的状态，以及返回值  
+
+### Futuer
+未来对象，task的容器   
+Futuer里面包含了workItem,workItem是线程执行的单元，执行结果会保存到futuer容器中  
+ThreadPoolExector 会根据实例化时的线程数量，拉起线程，执行workItem  
+
+
+## 多进程和多线程对比
+python多线程编程由于GIL锁的存在，无法使用多核cpu，所以对于耗cpu的程序来说，使用python，需要使用多进程，才能提高程序性能  
+
+concurrent.futures 提供了多进程与多线程统一抽象
+
+
+### multiprocessing 多进程编程
+
+### 进程间的通信-Queue,Pipe,Manager
+1. 多进程的Queue和线程的Queue不是同一个
+2. 共享全局变量不适用多进程
+3. multiprocessing中的Queue,不能用于进程池
+4. multiprocessing.pool 中的进程间通信需要使用manager中的Queue,manager需要实例化
+5. python中有3个Queue,threading.Queue,multiprocessing.Queue,multiprocessing.manager.Queue
+6. pipe只能适用于两个进程间通信,pipe性能高于queue
+
+### 进程间共享变量
+通过multiprocessing.manager.dict实现  
+

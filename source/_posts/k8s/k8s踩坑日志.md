@@ -52,3 +52,7 @@ export KUBECONFIG=~/.kube/config
 ```
 kubectl port-forward svc/mysql 30001:3306 -n beatflow-data --address 0.0.0.0
 ```
+
+
+# OCI runtime exec failed: exec failed: unable to start container process: open /dev/pts/0: operation not permitted: unknown
+调整contained的配置后，调整之前的pod进不去，需要重启pod

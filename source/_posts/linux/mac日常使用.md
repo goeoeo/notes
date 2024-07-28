@@ -144,3 +144,18 @@ ab -v
 eval 'ssh-agent'
 ssh-add ~/.ssh/id_rsa
 ```
+
+
+# 如何在mac下创建目录
+1. 进入/User/xxxxxx/下并创建data文件夹
+    ```
+    cd /User/xxxxxxx/
+    sudo mkdir data
+    sudo chmod -R 777 /data
+    ```
+2. 打开synthetic.conf并写入以下内容，注意data和/System/Volumes/Data/data之间是tab不是空格
+    ```
+    sudo vim /etc/synthetic.conf
+    data    /User/xxxxxxx/data
+    ```
+3. 重启电脑   
