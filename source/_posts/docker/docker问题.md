@@ -49,6 +49,19 @@ docker system prune -f
 该命令会删除暂停中的容器、没有关联容器的镜像、没有 tag 的镜像、没有被使用的数据卷，简单而言，没有在 run 或被使用的东西都被清理掉，
 注意，如果你有一些暂时暂停的容器，这个命令也会将其清理掉。
 
+
+# docker镜像操作
+```
+# 打包镜像
+docker save xx.tar $imageName
+
+# 载入镜像
+docker load - xx.tar
+
+# docker打包镜像
+docker buildx build --platform linux/amd64,linux/arm64 -t martindai/wechat-robot:1.0 --load .
+```
+
 # 参考
 * [收藏！24 个 Docker 疑难杂症处理技巧](https://www.bilibili.com/read/cv16472262)
 

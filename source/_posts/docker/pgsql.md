@@ -12,5 +12,5 @@ tags:
 
 ## 单机版
 ```
-docker run --name mypostgres -e POSTGRES_PASSWORD=p@ss52Dnb -e POSTGRES_USER=yunify --restart=always -d -p 5432:5432 postgres 
+docker run --name postgres9.4 -e POSTGRES_PASSWORD=root -e POSTGRES_USER=root --restart=always -d  postgres:9.4 
 ```
