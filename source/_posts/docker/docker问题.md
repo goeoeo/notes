@@ -62,6 +62,44 @@ docker load - xx.tar
 docker buildx build --platform linux/amd64,linux/arm64 -t martindai/wechat-robot:1.0 --load .
 ```
 
+
+# docker buildx 使用
+
+## 安装buildx
+```
+# 下载
+ wget https://github.com/docker/buildx/releases/download/v0.8.2/buildx-v0.8.2.linux-amd64
+ 
+# copy
+mv buildx-v0.8.2.linux-amd64 ~/.docker/cli-plugins/docker-buildx
+chmod +x  ~/.docker/cli-plugins/docker-buildx
+
+# 查看版本
+docker buildx 
+```
+
+## 安装模拟器
+安装模拟器的主要作用是让 buildx 支持跨 CPU 架构编译。
+```
+docker run --privileged --rm tonistiigi/binfmt --install all
+
+docker buildx ls
+```
+## 创建构建器
+docker buildx create --name mybuilder --use 
+
+
+# docker 报错 x509: certificate signed by unknown authority
+1. 打开daemon.json，加入你的私库地址 vi /etc/docker/daemon.json
+```
+{
+"insecure-registries":["私库地址"]
+}
+```
+2. 重启dokcer
+```
+systemctl daemon-reload && systemctl restart docker
+```
 # 参考
 * [收藏！24 个 Docker 疑难杂症处理技巧](https://www.bilibili.com/read/cv16472262)
 
