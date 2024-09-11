@@ -7,59 +7,8 @@ tags:
 - mac
 ---
 # docker安装
-docker-desktop 太消耗资源且无法商用，这里使用 colima +dockercli 的方案   
+orbStack 
 
-1. 安装docker client   
-```shell
-brew install docker docker-compose
-```
-2. 安装colima (很漫长)  
-```shell
-brew install colima
-```
-
-3. 将docker-compose 作为docker的插件  
-```shell
-$ mkdir -p ~/.docker/cli-plugins
-$ ln -sfn $(brew --prefix)/opt/docker-compose/bin/docker-compose ~/.docker/cli-plugins/docker-compose
-```
-> docker info 可以看到 不再报找不到插件的错误
-
-4. 启动colima 同时配置镜像
-```shell
-# 找到docker 配置  "registry-mirrors": ["https://9lrfffi7.mirror.aliyuncs.com"]
-colima start -e 
-```
-
-
-
-
-# mac宿主机和docker容器网络不通 (测试无效)
-安装docker-connector服务  
-1. 使用brew安装docker-connector  
-```shell
-brew install wenjunxiao/brew/docker-connector
-```
-2. 执行下面命令将docker所有 bridge 网络都添加到docker-connector路由
-```shell
-docker network ls --filter driver=bridge --format "{{.ID}}" | xargs docker network inspect --format "route {{range .IPAM.Config}}{{.Subnet}}{{end}}" >> "$(brew --prefix)/etc/docker-connector.conf"
-```
-> /usr/local/etc/docker-connector.conf是安装docker-connector后生成的配置文件
-
-3. 使用sudo启动docker-connector服务  
-```shell
-sudo brew services start docker-connector
-```
-
-4. 使用下面命令创建wenjunxiao/mac-docker-connector容器，要求使用 host 网络并且允许 NET_ADMIN
-```shell
-docker run -it -d --restart always --net host --cap-add NET_ADMIN --name connector wenjunxiao/mac-docker-connector
-```
-注意服务启动后宿主机和容器网络还是没有生效 执行下面这个，可以不以守护进程的模式启动
-```shell
-sudo docker-connector -config /opt/homebrew/etc/docker-connector.conf
-```
-docker-connector容器启动成功后，macOS宿主机即可访问其它容器网络
 
 
 # 解决brew install 缓慢问题
@@ -146,7 +95,7 @@ ssh-add ~/.ssh/id_rsa
 ```
 
 
-# 如何在mac下创建目录
+# 如何在mac根目录下创建目录
 1. 进入/User/xxxxxx/下并创建data文件夹
     ```
     cd /User/xxxxxxx/
@@ -159,3 +108,8 @@ ssh-add ~/.ssh/id_rsa
     data    /User/xxxxxxx/data
     ```
 3. 重启电脑   
+
+
+# mac下端口转发
+![](mac日常使用/img.png)
+
