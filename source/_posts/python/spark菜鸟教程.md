@@ -264,3 +264,76 @@ spark.jars /pitrix/data/warehouse/package/postgresql-42.2.5.jar
 spark.driver.extraClassPath /pitrix/data/warehouse/package/postgresql-42.2.5.jar
 ```
 
+
+# SparkSQL定义UDF函数
+1. UDF(User-Defined-Function) 函数，一对一的关系，输入一个值经过函数后输出一个值
+2. UDAF(User-Defined-Aggregation-Function)聚合函数，多对一关系，输入多个值，输出一个值，通用与groupBy联合使用
+3. UDTF(User-Defined Table-Generating Functions)函数，一对多关系，输入一个值输出多个值（一行变多行），有点像flatMap
+![](spark菜鸟教程/img_6.png)
+
+
+定义方式有两种： 
+1. sparksession.udf.register() 注册的UDF可以用于DSL和SQL。  
+2. pyspark.sql.functions.udf 仅能用于DSL风格。 
+
+```python 
+# -*- coding: utf-8 -*-
+
+from pyspark.sql import SparkSession
+from pyspark.sql import functions as F
+from pyspark.sql.types import StructType, StringType, IntegerType
+
+if __name__ == "__main__":
+    spark = SparkSession.builder.appName("test").config("spark.sql.shuffle.partitions",2).getOrCreate()
+    sc = spark.sparkContext
+
+
+    #构建一个RDD
+    rdd=sc.parallelize([1,2,3,4,5]).map(lambda x: [x])
+    df=rdd.toDF(["num"])
+
+    def num_ride_10(num):
+        return num * 10
+
+    # 通过方式1注册
+    # 参数1:注册UDF的名称，这个udf名称，仅可用于SQL风格
+    # 参数2:UDF处理逻辑，是一个单独的方法
+    # 参数3:声明UDF的返回值，UDF注册的时候，必须声明返回值，并且UDF函数的返回值需要和声明的返回值类型一致
+    # 返回值对象：这是一个UDF对象，仅可用于DSL语法
+    udf2=spark.udf.register("num_ride_10", num_ride_10,IntegerType())
+
+    # SQL风格使用
+    # selectExpr 以select表达式执行，表达式SQL风格的表达式
+    # selectExpr 接受普通的字符串字段名，或者返回值是Column对象的计算
+    df.selectExpr("num_ride_10(num)").show()
+
+    # DSL风格
+    # 返回值是UDF对象，如果作为方法使用，传入的参数一定是Column对象
+    df.select(udf2(df['num'])).show()
+
+
+    # 方式二注册
+    udf3=F.udf(num_ride_10,IntegerType())
+    df.select(udf3(df['num'])).show()
+
+```
+
+
+# SparkSQL使用窗口函数
+开窗函数的引入是为了显示聚集前的数据，有显示聚集后的数据，即在每一行的最后一列添加聚合的结果。
+* AVG
+* RANK
+* DENSE_RANK
+* ROW_NUMBER
+* NTILE
+
+
+# Catalyst优化器
+RDD执行流程：代码-> DAG调度器逻辑任务-> Task调度器任务分配和管理监控 -> Worker干活。
+* 断言下推，将Filter这种可以减少数据集的操作下推，放在Scan的位置，这样可以减少操作的数据量
+* 列值裁剪，在断言下推后执行裁剪，指读取需要的列，减少数据量，对于列式存储例如parquet 非常合适
+
+# SparkSQL执行流程
+![](spark菜鸟教程/img_7.png)
+
+
