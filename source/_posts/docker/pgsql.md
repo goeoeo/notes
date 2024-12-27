@@ -12,5 +12,5 @@ tags:
 
 ## 单机版
 ```
-docker run --name postgres9.4 -e POSTGRES_PASSWORD=root -e POSTGRES_USER=root --restart=always -d  postgres:9.4 
+docker run --name postgres10.4 -e POSTGRES_PASSWORD=root -e POSTGRES_USER=root --restart=always -d  postgres:10.4 
 ```

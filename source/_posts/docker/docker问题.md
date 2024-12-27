@@ -86,7 +86,13 @@ docker run --privileged --rm tonistiigi/binfmt --install all
 docker buildx ls
 ```
 ## 创建构建器
-docker buildx create --name mybuilder --use 
+docker buildx create --name multi-platform --use --platform linux/amd64,linux/arm64 --driver docker-container
+
+## 启动构建器
+docker buildx inspect multi-platform  --bootstrap
+
+## 编译
+docker buildx build --push --platform linux/amd64,linux/arm64/v8 -t dockerhub.betacloud.com/service/pitrix-flyway:v0.0.2  .
 
 
 # docker 报错 x509: certificate signed by unknown authority
@@ -104,3 +110,14 @@ systemctl daemon-reload && systemctl restart docker
 * [收藏！24 个 Docker 疑难杂症处理技巧](https://www.bilibili.com/read/cv16472262)
 
 
+
+
+# docker restrt 失败卡住一直处于activating状态
+```
+# 关键命令
+systemctl daemon-reexec
+
+systemctl daemon-reload
+
+systemctl restart docker
+```

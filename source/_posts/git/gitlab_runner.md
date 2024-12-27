@@ -78,7 +78,7 @@ sudo gitlab-runner run
 
 ### 在gitlab代码库中注册gitlab-runner
 
-进入仓库->settings->CI/CD Pipelines  ![image-20211119145209526](/home/yu/code/notes/source/_posts/git/gitlab_runner/image-20211119145209526.png)
+进入仓库->settings->CI/CD Pipelines  ![image-20211119145209526](gitlab_runner/image-20211119145209526.png)
 
 2. 执行注册
 

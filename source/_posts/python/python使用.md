@@ -1,4 +1,4 @@
-# pyenv 多环境安装
+# pyenv mac安装
 macos 环境下 直接使用brew 安装 2.7 会提示找不到包    
 virtualenv 是py 提供的一个隔离环境包的工具，不会管理多个解释器  
 pyenv 可以用来管理多个解释器，以及利用virtualenv 来管理多个虚拟环境  
@@ -8,6 +8,28 @@ brew update
 brew install pyenv
 brew install pyenv-virtualenv
 
+```
+
+# pyenv ubuntu安装
+## 安装依赖
+```
+sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses-dev xz-utils tk-dev libffi-dev liblzma-dev  git
+```
+## 安装pyenv
+```
+curl https://pyenv.run | bash
+```
+
+## 更改环境变量
+```
+vim ~/.bashrc
+
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+source ~/.bashrc
 ```
 
 ## 常用命令如下
