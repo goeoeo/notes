@@ -152,9 +152,9 @@ MVCC多版本并发控制，保证的是“读已提交”和“可重复读”
 MVCC（乐观锁）多版本并发控制，保证的是“读已提交”和“可重复读”
 
 版本链：
-页记录里面有两个额外的字段trx_id(事务ID)和roll_pointer,    
-undo日志里面有三个额外的字段trx_id(事务ID)和roll_pointer,row_id   
-roll_pointer指向row_id形成一条版本链
+InnoDB 引擎的数据行中有 两个额外的字段trx_id(事务ID)和roll_pointer(回滚指针),    
+undolog 当事务对数据进行修改时，先将修改前旧值写入undolog，形成一个旧版本,将当前事务id写入trx_id，将旧版记录的指针写入当前和roll_pointer  
+这样基于 undolog的数据版本以及字段roll_pointer就形成了一个版本链
 
 ![](Mysql面试题/img.png)
 
@@ -166,7 +166,7 @@ ReadView:
 4. max_trx_id: 全局事务ID最大值+1
 
 
-MVCC 通过ReadView以及undo日志形成的版本来控制多版本并发读，查询记录时先判定，页记录的trx_id是否在当前ReadView的m_ids列表中，如果不在说明事务已提交，如果在表明
+MVCC 通过ReadView以及undo日志形成的版本来控制多版本并发读，查询记录时，先判定页记录的trx_id是否在当前ReadView的m_ids列表中，如果不在说明事务已提交，如果在表明
 当前当前数据行是在，查询开始后提交的，就需要根据版本链找出小于min_trx_id的记录
 
 读已提交和可重复读的实现区别在于，读已提交每次读的时候都会重新生成ReadView，这样已提交的事务就不在m_ids中，实现读到提交的记录
