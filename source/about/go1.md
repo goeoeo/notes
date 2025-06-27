@@ -200,9 +200,9 @@ CloudSat 旨在为云服务商/大型企业提供一站式的云资源与应用�
 
 ## 技术能力
 - 架构: 分布式/微服务/高可用/高性能
-- 开发: Linux/设计模式/网络编程/并发编程
+- 开发: Linux/设计模式/DDD领域驱动/网络编程/并发编程
 - 语言: Golang/Python/PHP
-- 框架: Benchmark(自研微服务框架)/Gin/Beego/Laravel/ThinkPHP
+- 框架: Benchmark(自研微服务框架)/GoZero/Gin/Beego/Laravel/ThinkPHP
 - 数据库相关: Postgres/MySQL/SQLite/Redis/Elasticsearch
 - 消息队列: Rabbitmq/Kafka
 - 工具: Git/Jenkins/Svn/Swagger/Proto
