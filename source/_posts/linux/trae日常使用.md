@@ -1,3 +1,11 @@
+---
+layout: post
+title: Trae AI 日常使用指南
+date: 2023-10-24 10:00:00
+categories: linux
+tags: [trae, ide, 快捷键, python, golang]
+---
+
 # 快捷键
 * 选中当前单词后，按 Command + D 可依次选中文档中下一个相同的单词
 * 要一次性选中所有相同单词，按 Command + Shift + L
