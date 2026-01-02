@@ -22,6 +22,27 @@ tags: [trae, ide, 快捷键, python, golang]
 * 打开设置 Command + ,
 * 跳转至文件中的下一个错误 F8
 
+# 插件
+## Rest Client
+用于发送http请求，调试api
+配置变量：command+, -> 搜索rest client -> 工作区 -> Rest-client: Environment Variables  
+设置后会在.vscode/settings.json 中添加如下配置：
+```json
+{
+    "rest-client.environmentVariables": {
+        "$shared": {},
+        "dev": {
+            "host": "127.0.0.1:9800"
+        },
+        "testing": {
+            "host": "172.31.60.114:9800"
+        }
+    }
+}
+```
+添加后，在发送请求时，就可以使用${变量名}来引用变量了 
+
+
 
 # python
 ## 配置解释器 
@@ -59,8 +80,65 @@ command + shift + p -> go: install/upgrade tools
    - 作用：Golang 语言服务器（全称 Go Language Server），是 IDE（如 Trae、VS Code）实现代码补全、语法检查、跳转定义、重构等功能的核心依赖
    - 说明：你在 Trae 中看到的 Go 代码语法高亮、包导入提示等，都是 gopls 在后台提供的支持
 
+## 配置项目运行支持微服务
 
-## 配置golang项目的运行与调试
+### 配置任务
+command + shift + p -> 任务: 配置任务   
+使用模板创建tasks.json文件   
+配置3个服务，举例说明：
+```json
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "start:gateway",
+            "type": "shell",
+            "command": "go run ${workspaceFolder}/cmd/gateway/main.go",
+            "isBackground": true
+        },
+        {
+            "label": "start:cooperate",
+            "type": "shell",
+            "command": "go run ${workspaceFolder}/cmd/cooperate/main.go",
+            "isBackground": true
+        },
+        {
+            "label": "start:product",
+            "type": "shell",
+            "command": "go run ${workspaceFolder}/cmd/product/main.go",
+            "isBackground": true
+        },
+        {
+            "label": "start:all",
+            "dependsOn": [
+                "start:gateway",
+                "start:cooperate",
+                "start:product"
+            ],
+            "isBackground": true,
+            "problemMatcher": [
+                "$go"
+            ]
+        }
+    ]
+}
+```
+
+### 运行任务
+command + shift + p -> 任务: 运行任务  
+选择start:all 即可启动所有服务
+
+### 停止任务
+command + shift + p -> 任务: 终止任务  
+选择start:all 即可停止所有服务
+
+
+
+
+## 配置golang项目调试
+主要用于debug
 点击运行与调试 -> 点击创建launch.json文件 -> 选择go -> 配置launch.json文件    
 会在.vscode目录下生成launch.json文件 
 ```json
@@ -96,3 +174,7 @@ command + shift + p -> go: install/upgrade tools
     ]
 }
 ```
+
+command + shift + p -> 任务: 运行任务  
+
+
